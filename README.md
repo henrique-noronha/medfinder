@@ -1,6 +1,8 @@
  # Projeto de Sistemas 2025.1 - Universidade Federal do Tocantins
- Bacharelado em Ciência da Computação, 
- Professor: Edeilson Milhomem da Silva
+ Bacharelado em Ciência da Computação,  
+  
+ Professor: Edeilson Milhomem da Silva  
+
  Grupo: Henrique Noronha, Vicente, Breno Borges, João Victor Mota e Igor.
 
 ## MedFinder
