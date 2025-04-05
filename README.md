@@ -35,35 +35,28 @@ O MVP (Minimum Viable Product) do MedFinder será uma versão funcional da plata
 ---
 
 ## User Stories e Protótipos de Tela 
-<center>
+
 
  ### Página de Boas-vindas MedFinder: 
 
 
-
-![Index](./images/index.png)  </center>
+![Index](./images/index.png)  
 
  ### Cadastro e Login:  
  Como usuário quero me cadastrar e fazer login na plataforma para acessar os serviços de saúde disponíveis. Para realizar o login é necessário ter feito o cadastro e preencher o email e senha, caso contrário, clicar em "Não possui cadastro?"  
 
-<center>
 
  ![Login](./images/login.png) ![Cadastro](./images/cadastro.png)  
-
-
-</center>
 
 
  ### Tela Inicial do Usuário  
 
  Como usuário, após fazer o login, consigo visualizar o campo de pesquisa, além de cards como: histórico, pendências, resultados e ajuda.  
 
-<center>
 
  ![Home](./images/home.png)
  
 
-</center>
 
 **Critérios de Aceitação**  
 
@@ -100,10 +93,7 @@ O MVP (Minimum Viable Product) do MedFinder será uma versão funcional da plata
 Como usuário, quero verificar meu histórico, minhas pendencias e os resultados dos meus exames.  
 Para isso haverá cards na tela inicial, que ao clicar redirecionará para as respectivas páginas.   
 
-<center>
-
 ![Histórico](./images/historico.png) ![Pendentes](./images/pendentes.png) ![Resultados](./images/Exames.png)  
-</center>
 
 **Critérios de Aceitação**    
 -  Permitir visualizar o **histórico** de consultas já concluídas, com botão "detalhes" para expansão. 
@@ -112,11 +102,8 @@ Para isso haverá cards na tela inicial, que ao clicar redirecionará para as re
 
 ### Pesquisa  
 Como **usuário**, quero pesquisar profissionais e serviços da saúde podendo visualizar uma lista de resultados, podendo clicar em um profissional ou serviço para abrir uma nova página e realizar o agendamento.  
-<center>
 
 ![Pesquisa](./images/pesquisa.png)    
-
-</center>
 
 **Critérios de Aceitação**  
 -  Permitir que o usuário pesquise por profissionais com filtros disponíveis.  
@@ -127,11 +114,7 @@ Como **usuário**, quero pesquisar profissionais e serviços da saúde podendo v
 ### Agendamentos  
 Como usuário, quero que, ao clicar em um profissional, seja aberta uma aba contendo um calendário e um botão 'Ver Detalhes', para que eu possa selecionar uma data disponível e visualizar informações detalhadas do agendamento.  
 
-<center>
-
 ![Agendamento](./images/agendamento.png)   
-
-</center>
 
  **Critérios de Aceitação**
 -  Ao clicar em um profissional na lista, o sistema deve abrir uma nova aba com um calendário.
@@ -151,4 +134,9 @@ Nesta primeira iteração, serão implementadas as funcionalidades essenciais pa
 4. Tela Home
 5. Editar Perfil (Tela e Funcionalidade)   
 
-Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.
+Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.  
+
+### Links Úteis: 
+[Canvas Model](https://www.canva.com/design/DAGieJYwx_A/xZMhdLHK27y2-sjlAGdxYA/edit?utm_content=DAGieJYwx_A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
+[Plano de Negócio](https://drive.google.com/file/d/1AQET8fuBe_vVqDHvAbeuwbzvECn_IEVi/view?usp=sharing)  
+[Prototipação](https://www.figma.com/design/ox6mAwSthgpXY2brCMVVpa/MedFinder?node-id=0-1&t=Epe7rgLvOBSERP3l-1)
