@@ -133,9 +133,9 @@ Nesta primeira iteração, serão implementadas as funcionalidades essenciais pa
 |----|------------------------|------|----------------|----------|----------|
 | 1  | Tela de Boas-vindas    |      |                | Henrique | Vicente  |
 | 2  | Cadastro de Usuário    |      |                | Breno    | João     |
-| 3  | Login de Usuário       |      |                | Igor     | Henrique |
+| 3  | Login de Usuário       |      |                | Iago     | Henrique |
 | 4  | Tela Home              |      |                | Vicente  | Breno    |
-| 5  | Editar Perfil          |      |                | João     | Igor     |
+| 5  | Editar Perfil          |      |                | João     | Iago     |
   
 
 Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.  
