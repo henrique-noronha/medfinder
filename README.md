@@ -127,12 +127,16 @@ Como usuário, quero que, ao clicar em um profissional, seja aberta uma aba cont
 ### Iteração 1: Cadastro, login e edição de perfil  
 Nesta primeira iteração, serão implementadas as funcionalidades essenciais para cadastro e login dos usuários.  
 
-**Requisitos Funcionais**   
-1. Cadastro de Usuário (Funcionalidade e Tela)
-2. Login de Usuário (Funcionalidade e Tela)
-3. Tela Boas-vindas 
-4. Tela Home
-5. Editar Perfil (Tela e Funcionalidade)   
+**Requisitos Funcionais**  
+
+| Nº | Requisito             | Tela | Funcionalidade | Autor    | Revisor  |
+|----|------------------------|------|----------------|----------|----------|
+| 1  | Tela de Boas-vindas    |      |                | Henrique | Vicente  |
+| 2  | Cadastro de Usuário    |      |                | Breno    | João     |
+| 3  | Login de Usuário       |      |                | Igor     | Henrique |
+| 4  | Tela Home              |      |                | Vicente  | Breno    |
+| 5  | Editar Perfil          |      |                | João     | Igor     |
+  
 
 Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.  
 
