@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
 
-export const loginStyles = StyleSheet.create({
+export const forgotPasswordStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-around',
@@ -63,21 +63,9 @@ export const loginStyles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  forgotPasswordText: {
-    marginTop: 12,
-    textAlign: 'center',
-    color: '#fff',
-    textDecorationLine: 'underline',
-  },
   registerText: {
     color: '#fff',
     marginTop: 16,
     textDecorationLine: 'underline',
-  },
-  version: {
-    fontSize: 12,
-    color: '#fff',
-    position: 'absolute',
-    bottom: 10,
   },
 });

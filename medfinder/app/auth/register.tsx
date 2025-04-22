@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
-import { registerStyles as styles } from '../styles/registerstyles';
+import { registerStyles as styles, gradientColors } from '../styles/registerstyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 
@@ -28,10 +28,7 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#64C1FF', '#3C7499']}
-        style={styles.backgroundGradient}
-      />
+      <LinearGradient colors={gradientColors} style={styles.backgroundGradient} />
 
       <View style={styles.logo}>
         <Text style={styles.logoText}>MedFinder</Text>

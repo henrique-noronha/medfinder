@@ -1,12 +1,16 @@
 import { StyleSheet } from 'react-native';
 
+export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+
+
 export const registerStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: 24,
-    backgroundColor: '#4facfe',
+    position: 'relative',
+    backgroundColor: 'transparent', 
   },
   backgroundGradient: {
     ...StyleSheet.absoluteFillObject,

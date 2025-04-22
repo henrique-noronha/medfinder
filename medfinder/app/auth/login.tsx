@@ -8,18 +8,14 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-          <LinearGradient
-            colors={['#64C1FF', '#3C7499']}
-            style={styles.backgroundGradient}
-          />
-      
-        <View style={styles.logo}>
-             <Text style={styles.logoText}>MedFinder</Text>
-        </View>
+      <LinearGradient colors={gradientColors} style={styles.backgroundGradient} />
 
-        <Text style={styles.title}>
-        Saúde ao seu alcance:
-        encontre, agende e cuide-se! <Text style={styles.strong}></Text>
+      <View style={styles.logo}>
+        <Text style={styles.logoText}>MedFinder</Text>
+      </View>
+
+      <Text style={styles.title}>
+        Saúde ao seu alcance: encontre, agende e cuide-se!
       </Text>
 
       <Text style={styles.title}>
@@ -40,25 +36,23 @@ export default function LoginScreen() {
           placeholderTextColor="#ccc"
           secureTextEntry
         />
-      
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          // lógica de login 
-        }}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            // lógica de login
+          }}>
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => { /* lógica para recuperação de senha */ }}>
-      <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/auth/forgot-password')}>
+          <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
+        </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => router.push('/auth/register' as const)}>
+      <TouchableOpacity onPress={() => router.push('/auth/register')}>
         <Text style={styles.registerText}>Não tem conta? Cadastre-se</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
