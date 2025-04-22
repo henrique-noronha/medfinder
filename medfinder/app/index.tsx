@@ -1,7 +1,7 @@
-// app/index.tsx
+
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { styles } from './styles/indexstyles';
+import { indexStyles as styles } from './styles/indexstyles';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function WelcomeScreen() {
