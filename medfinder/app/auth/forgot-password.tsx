@@ -1,10 +1,31 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { forgotPasswordStyles as styles } from '../styles/forgot-passwordstyles';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useState } from 'react';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../firebaseConfig'; 
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
+
+  const [email, setEmail] = useState('');
+
+  const handlePasswordReset = async () => {
+    if (!email) {
+      Alert.alert('Erro', 'Por favor, preencha seu email.');
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert('Sucesso', 'Link de recuperação enviado para o seu email.');
+      router.back(); // volta para o login
+    } catch (error: any) {
+      console.error(error);
+      Alert.alert('Erro', 'Erro ao enviar o link de recuperação.');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -28,13 +49,13 @@ export default function ForgotPasswordScreen() {
           placeholderTextColor="#ccc"
           keyboardType="email-address"
           autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
         />
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            // lógica para envio de recuperação
-          }}
+          onPress={handlePasswordReset}
         >
           <Text style={styles.buttonText}>Enviar link de recuperação</Text>
         </TouchableOpacity>
