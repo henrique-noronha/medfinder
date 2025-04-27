@@ -1,10 +1,32 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { loginStyles as styles, gradientColors } from '../styles/loginstyles';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useState } from 'react';
+import { auth } from '../../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      Alert.alert('Sucesso', 'Login realizado com sucesso!');
+      router.replace('/home');
+
+    } catch (error: any) {
+      console.error(error);
+      Alert.alert('Erro', 'Email ou senha incorretos.');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -29,19 +51,22 @@ export default function LoginScreen() {
           placeholderTextColor="#ccc"
           keyboardType="email-address"
           autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
         />
         <TextInput
           style={styles.input}
           placeholder="Senha"
           placeholderTextColor="#ccc"
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            // lógica de login
-          }}>
+          onPress={handleLogin}
+        >
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
 
