@@ -11,21 +11,25 @@ export default function HomeScreen() {
   return (
     <LinearGradient colors={['#71C9F8', '#3167AF']} style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
+        
         {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.appTitleContainer}>
             <Text style={styles.appTitleText}>MedFinder</Text>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image
-              source={{ uri: 'https://via.placeholder.com/40' }}
-              style={{ width: 40, height: 40, borderRadius: 20 }}
-            />
-            <TouchableOpacity style={{ marginLeft: 15 }}>
+          <View style={styles.iconsContainer}>
+            <TouchableOpacity onPress={() => router.push('/profile/edit')}>
+              <Image
+                source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+                style={styles.profileImage}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
               <Feather name="bell" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
+
 
         {/* Saudação */}
         <Text style={styles.greetingText}>Seja bem-vindo, Usuário!</Text>

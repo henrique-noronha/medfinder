@@ -22,6 +22,18 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  iconsContainer: {     // <<<<< novo
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  profileImage: {
+    width: 50, // ou outro valor desejado
+    height: 50, // ou outro valor desejado
+    borderRadius: 25, // metade do tamanho da largura/altura para criar o efeito circular
+    borderWidth: 2, // borda, se necessário
+    borderColor: '#fff', // cor da borda
+  },
   greetingText: {
     color: '#fff',
     fontSize: 16,
@@ -69,7 +81,7 @@ export default StyleSheet.create({
   card: {
     backgroundColor: '#F2F2F2',
     width: '47%',
-    height: 140,            // altura fixa menor
+    height: 140,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15,
@@ -79,7 +91,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    },
+  },
   cardIcon: {
     marginBottom: 10,
   },
