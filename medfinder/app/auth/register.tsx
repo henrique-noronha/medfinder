@@ -3,8 +3,9 @@ import { useRouter } from 'expo-router';
 import { registerStyles as styles, gradientColors } from '../styles/registerstyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
-import { auth } from '../../firebaseConfig'; // <-- importa seu firebaseConfig
+import { auth, db } from '../../firebaseConfig'; // <-- Certifique-se de importar 'db'
 import { createUserWithEmailAndPassword } from 'firebase/auth'; // <-- função de cadastro
+import { doc, setDoc } from 'firebase/firestore'; // <-- Importe 'doc' e 'setDoc'
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -37,9 +38,19 @@ export default function RegisterScreen() {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      Alert.alert('Sucesso', 'Conta criada com sucesso!');
-      router.replace('/auth/login'); // Leva pro login após registro
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      if (user) {
+        // Salva os dados adicionais do usuário no Firestore
+        await setDoc(doc(db, 'users', user.uid), {
+          fullName: fullName,
+          cpf: cpf,
+          email: email,
+          // Adicione outros campos que você queira salvar
+        });
+        Alert.alert('Sucesso', 'Conta criada com sucesso!');
+        router.replace('/auth/login'); // Leva pro login após registro
+      }
     } catch (error: any) {
       console.log(error);
       Alert.alert('Erro no cadastro', error.message);
