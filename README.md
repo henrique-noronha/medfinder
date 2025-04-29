@@ -138,7 +138,27 @@ Nesta primeira iteração, serão implementadas as funcionalidades essenciais pa
 | 5  | Editar Perfil          |      |                | João     | Iago     |
   
 
-Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.  
+Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.   
+
+
+
+### Iteração 2: Cadastro e pesquisa de profissionais
+
+Nesta segunda iteração, serão desenvolvidas funcionalidades voltadas ao cadastro e busca de profissionais da saúde na plataforma.  
+
+**Requisitos Funcionais**
+
+| Nº | Requisito                          | Tela              | Funcionalidade         | Autor    | Revisor  |
+|----|------------------------------------|-------------------|------------------------|----------|----------|
+| 6  | Cadastro de Profissionais          |                   | Registro de perfil     | João     | Vicente  |
+| 7  | Pesquisa de Profissionais          | search.tsx        | Barra de busca         | Henrique | João     |
+| 8  | Tela de Resultados de Exames       | result.tsx        | Listagem de resultados | Breno    | João     |
+| 9  | Tela de Ajuda                      | help.tsx          | Instruções de uso      | Vicente  | Breno    |
+| 10 | Tela de Pendência                  | pending.tsx       | Mensagem de pendência  | Vicente  | Henrique |
+
+**Objetivo**:  
+Como usuário quero poder visualizar os profissionais disponíveis na plataforma e buscar por especialidade, nome ou localização, além de contar com orientações de uso.
+
 
 ### Links Úteis: 
 [Canvas Model](https://www.canva.com/design/DAGieJYwx_A/xZMhdLHK27y2-sjlAGdxYA/edit?utm_content=DAGieJYwx_A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
