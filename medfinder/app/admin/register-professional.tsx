@@ -318,4 +318,5 @@ export default function RegisterProfessionalScreen() {
       </ScrollView>
     </View>
   );
+  
 }
