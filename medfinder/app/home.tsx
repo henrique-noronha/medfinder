@@ -1,17 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { db } from '../firebaseConfig';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import styles from './styles/homestyles';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+
+const handleSearch = async () => {
+  if (searchQuery.trim()) {
+    const professionalsRef = collection(db, 'healthcareProfessionals');
+    
+    // Consulta por especialidade
+    const qSpecialty = query(professionalsRef, where('specialties', 'array-contains', searchQuery));
+    const specialtySnapshot = await getDocs(qSpecialty);
+    const specialtyResults = specialtySnapshot.docs.map(doc => doc.data());
+
+    // Consulta por nome (busca local após obter todos os docs, pois Firestore não suporta contains em strings)
+    const allSnapshot = await getDocs(professionalsRef);
+    const nameResults = allSnapshot.docs
+      .map(doc => doc.data())
+      .filter(doc => doc.fullName?.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    // Junta os dois resultados e remove duplicatas (por e-mail de contato como identificador único, por exemplo)
+    const combinedResultsMap = new Map();
+    [...specialtyResults, ...nameResults].forEach(item => {
+      combinedResultsMap.set(item.emailContact, item); // você pode usar outro identificador se preferir
+    });
+
+    const combinedResults = Array.from(combinedResultsMap.values());
+
+    router.push({
+      pathname: '/search',
+      params: {
+        results: JSON.stringify(combinedResults),
+      },
+    });
+  }
+};
+
 
   return (
     <LinearGradient colors={['#71C9F8', '#3167AF']} style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
-        
+
         {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.appTitleContainer}>
@@ -30,7 +66,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-
         {/* Saudação */}
         <Text style={styles.greetingText}>Seja bem-vindo, Usuário!</Text>
 
@@ -42,8 +77,10 @@ export default function HomeScreen() {
               style={styles.searchInput}
               placeholder="Cardiologista"
               placeholderTextColor="#999"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
             />
-            <TouchableOpacity style={styles.searchButton}>
+            <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
               <Feather name="search" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
