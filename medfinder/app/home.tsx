@@ -7,40 +7,47 @@ import { db } from '../firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import styles from './styles/homestyles';
 
+
 export default function HomeScreen() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
 
 const handleSearch = async () => {
+  const professionalsRef = collection(db, 'healthcareProfessionals');
+
+  let combinedResults = [];
+
   if (searchQuery.trim()) {
-    const professionalsRef = collection(db, 'healthcareProfessionals');
-    
-    // Consulta por especialidade
+    // Busca por especialidade
     const qSpecialty = query(professionalsRef, where('specialties', 'array-contains', searchQuery));
     const specialtySnapshot = await getDocs(qSpecialty);
     const specialtyResults = specialtySnapshot.docs.map(doc => doc.data());
 
-    // Consulta por nome (busca local após obter todos os docs, pois Firestore não suporta contains em strings)
+    // Busca por nome
     const allSnapshot = await getDocs(professionalsRef);
     const nameResults = allSnapshot.docs
       .map(doc => doc.data())
       .filter(doc => doc.fullName?.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    // Junta os dois resultados e remove duplicatas (por e-mail de contato como identificador único, por exemplo)
+    // Combinar e remover duplicatas
     const combinedResultsMap = new Map();
     [...specialtyResults, ...nameResults].forEach(item => {
-      combinedResultsMap.set(item.emailContact, item); // você pode usar outro identificador se preferir
+      combinedResultsMap.set(item.emailContact, item);
     });
 
-    const combinedResults = Array.from(combinedResultsMap.values());
-
-    router.push({
-      pathname: '/search',
-      params: {
-        results: JSON.stringify(combinedResults),
-      },
-    });
+    combinedResults = Array.from(combinedResultsMap.values());
+  } else {
+    // Buscar todos os profissionais se não tiver query
+    const allSnapshot = await getDocs(professionalsRef);
+    combinedResults = allSnapshot.docs.map(doc => doc.data());
   }
+
+  router.push({
+    pathname: '/search',
+    params: {
+      results: JSON.stringify(combinedResults),
+    },
+  });
 };
 
 
