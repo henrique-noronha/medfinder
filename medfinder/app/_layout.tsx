@@ -38,6 +38,9 @@ export default function RootLayout() {
         <Stack.Screen name="home" options={{ headerShown: false }} /> {}
         <Stack.Screen name="search" options={{ headerShown: false }} /> {}
         <Stack.Screen name="profile/edit" options={{ headerShown: false }} /> {}
+        <Stack.Screen name="help" options={{ headerShown: false }} /> {}
+        <Stack.Screen name="pending" options={{ headerShown: false }} /> {}
+        <Stack.Screen name="results" options={{ headerShown: false }} /> {}
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

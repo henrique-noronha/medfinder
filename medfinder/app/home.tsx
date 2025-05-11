@@ -100,19 +100,19 @@ const handleSearch = async () => {
             <Text style={styles.cardText}>Histórico</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => router.push('/pending')}>
             <Feather name="clock" size={28} color="#444" style={styles.cardIcon} />
             <Text style={styles.cardText}>Pendentes</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => router.push('/help')}>
             <Feather name="help-circle" size={28} color="#444" style={styles.cardIcon} />
             <Text style={styles.cardText}>Ajuda</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => router.push('/results')}>
             <FontAwesome5 name="thermometer-half" size={28} color="#444" style={styles.cardIcon} />
-            <Text style={styles.cardText}>Resultados</Text>
+             <Text style={styles.cardText}>Resultados</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
