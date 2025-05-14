@@ -159,6 +159,27 @@ Nesta segunda iteração, serão desenvolvidas funcionalidades voltadas ao cadas
 **Objetivo**:  
 Como usuário quero poder visualizar os profissionais disponíveis na plataforma e buscar por especialidade, nome ou localização, além de contar com orientações de uso.
 
+### Iteração 3: Agendamento e Visual
+
+Nesta terceira iteração, o foco está na implementação do agendamento de consultas, melhorias visuais na interface, integração com convênios e login dos profissionais.
+
+**Requisitos Funcionais**
+
+| Nº | Requisito                                    | Tela                   | Funcionalidade                          | Autor     | Revisor   |
+|----|----------------------------------------------|------------------------|-----------------------------------------|-----------|-----------|
+| 11 | Agendamento de Usuário                       | calendar.tsx           | Escolha de data e tipo de agendamento  | Henrique  | João      |
+| 12 | Tela de Agendamento de Profissional          | appointmentConfirm.tsx | Confirmação de solicitação              | Vicente   | Henrique  |
+| 13 | Refatorar Cadastro de Profissionais          | register.tsx           | Adicionar senha e tipo de atendimentos | João      | Vicente   |
+| 14 | Tela de Pendentes                            | pending.tsx            | Listagem de solicitações pendentes     | João      | Henrique  |
+| 15 | Tela de Histórico                            | history.tsx            | Consultas já realizadas                 | João      | Vicente   |
+| 16 | Tela de Resultados                           | results.tsx            | Listagem de exames/resultados           | Henrique  | João      |
+| 17 | Fale Conosco na Tela de Ajuda                | help.tsx               | Adicionar campo de contato              | Vicente   | João      |
+| 18 | Visual geral (cores, polimento, logo)        | todas                  | Padronização e identidade visual        | Equipe    | Equipe |
+
+**Objetivo**:  
+Como usuário, quero poder agendar atendimentos de forma simples e visualizar o histórico de consultas, enquanto conto com uma interface mais amigável e opções de contato para suporte.  
+Como profissional, quero poder fazer meu login, visualizar, aceitar e cancelar consultas pendentes.
+
 
 ### Links Úteis: 
 [Canvas Model](https://www.canva.com/design/DAGieJYwx_A/xZMhdLHK27y2-sjlAGdxYA/edit?utm_content=DAGieJYwx_A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
