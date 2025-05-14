@@ -3,8 +3,9 @@ import { useRouter } from 'expo-router';
 import { loginStyles as styles, gradientColors } from '../styles/loginstyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
-import { auth } from '../../firebaseConfig';
+import { auth, db } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -18,10 +19,25 @@ export default function LoginScreen() {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert('Sucesso', 'Login realizado com sucesso!');
-      router.replace('/home');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+
+        if (userData.role === 'admin') {
+          Alert.alert('Sucesso', 'Bem-vindo, administrador!');
+          router.replace('/auth/admin-dashboard'); // ajuste essa rota conforme seu projeto
+        } else {
+          Alert.alert('Sucesso', 'Login realizado com sucesso!');
+          router.replace('/home');
+        }
+      } else {
+        Alert.alert('Erro', 'Usuário não encontrado no Firestore.');
+      }
     } catch (error: any) {
       console.error(error);
       Alert.alert('Erro', 'Email ou senha incorretos.');
