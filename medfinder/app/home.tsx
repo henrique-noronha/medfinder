@@ -1,60 +1,79 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { db } from '../firebaseConfig';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import styles from './styles/homestyles';
 
+// Função para remover acentos e colocar tudo minúsculo
+const normalizeText = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+// Interface para os dados de cada profissional de saúde
+interface HealthcareProfessional {
+  fullName: string;
+  specialties: string[];
+  placesOfService: string[];
+  emailContact: string;
+}
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-const handleSearch = async () => {
-  const professionalsRef = collection(db, 'healthcareProfessionals');
+  const handleSearch = async () => {
+    const professionalsRef = collection(db, 'healthcareProfessionals');
+    let combinedResults: HealthcareProfessional[] = []; // Definindo o tipo dos resultados
 
-  let combinedResults = [];
+    const queryNormalized = normalizeText(searchQuery.trim());
 
-  if (searchQuery.trim()) {
-    // Busca por especialidade
-    const qSpecialty = query(professionalsRef, where('specialties', 'array-contains', searchQuery));
-    const specialtySnapshot = await getDocs(qSpecialty);
-    const specialtyResults = specialtySnapshot.docs.map(doc => doc.data());
+    const snapshot = await getDocs(professionalsRef);
+    const allProfessionals: HealthcareProfessional[] = snapshot.docs.map(doc => doc.data() as HealthcareProfessional); // Definindo o tipo explicitamente
 
-    // Busca por nome
-    const allSnapshot = await getDocs(professionalsRef);
-    const nameResults = allSnapshot.docs
-      .map(doc => doc.data())
-      .filter(doc => doc.fullName?.toLowerCase().includes(searchQuery.toLowerCase()));
+    if (queryNormalized) {
+      const results = allProfessionals.filter(prof => {
+        const name = normalizeText(prof.fullName || '');  // Garante que 'name' sempre será uma string
+        const specialties = (prof.specialties || []).map((s: string) => normalizeText(s));  // Garante que 'specialties' seja um array de strings
+        const places = (prof.placesOfService || []).map((p: string) => normalizeText(p));  // Garante que 'places' seja um array de strings
 
-    // Combinar e remover duplicatas
-    const combinedResultsMap = new Map();
-    [...specialtyResults, ...nameResults].forEach(item => {
-      combinedResultsMap.set(item.emailContact, item);
+        return (
+          name.includes(queryNormalized) ||
+          specialties.some(s => s.includes(queryNormalized)) ||
+          places.some(p => p.includes(queryNormalized))
+        );
+      });
+
+      // Remover duplicatas pelo email
+      const uniqueMap = new Map();
+      results.forEach(item => uniqueMap.set(item.emailContact, item));
+      combinedResults = Array.from(uniqueMap.values());
+    } else {
+      combinedResults = allProfessionals;
+    }
+
+    router.push({
+      pathname: '/search',
+      params: {
+        results: JSON.stringify(combinedResults),
+      },
     });
-
-    combinedResults = Array.from(combinedResultsMap.values());
-  } else {
-    // Buscar todos os profissionais se não tiver query
-    const allSnapshot = await getDocs(professionalsRef);
-    combinedResults = allSnapshot.docs.map(doc => doc.data());
-  }
-
-  router.push({
-    pathname: '/search',
-    params: {
-      results: JSON.stringify(combinedResults),
-    },
-  });
-};
-
+  };
 
   return (
     <LinearGradient colors={['#71C9F8', '#3167AF']} style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
-
         {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.appTitleContainer}>
@@ -112,7 +131,7 @@ const handleSearch = async () => {
 
           <TouchableOpacity style={styles.card} onPress={() => router.push('/results')}>
             <FontAwesome5 name="thermometer-half" size={28} color="#444" style={styles.cardIcon} />
-             <Text style={styles.cardText}>Resultados</Text>
+            <Text style={styles.cardText}>Resultados</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
