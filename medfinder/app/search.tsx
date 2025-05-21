@@ -146,7 +146,22 @@ export default function SearchResultsScreen() {
       <ScrollView contentContainerStyle={styles.resultsContainer}>
         {searchResults.length > 0 ? (
           searchResults.map((professional, index) => (
-            <View key={index} style={styles.resultCard}>
+            <TouchableOpacity
+              key={index}
+              style={styles.resultCard}
+              onPress={() =>
+                router.push({
+                  pathname: '/schedule',
+                  params: {
+                    fullName: professional.fullName,
+                    emailContact: professional.emailContact,
+                    phone: professional.phone,
+                    specialties: JSON.stringify(professional.specialties),
+                    placesOfService: JSON.stringify(professional.placesOfService),
+                  },
+                })
+              }
+            >
               <View style={styles.avatarCircle}>
                 <Text style={styles.avatarText}>
                   {professional.fullName.trim()[0].toUpperCase()}
@@ -167,7 +182,7 @@ export default function SearchResultsScreen() {
                   Atende em: {professional.placesOfService.join(', ')}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <Text style={styles.noResultsText}>Nenhum profissional encontrado.</Text>

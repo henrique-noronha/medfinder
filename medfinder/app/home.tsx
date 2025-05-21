@@ -6,22 +6,22 @@ import {
   Image,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { db } from '../firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
+import { getAuth, signOut } from 'firebase/auth';
 import styles from './styles/homestyles';
 
-// Função para remover acentos e colocar tudo minúsculo
 const normalizeText = (text: string) =>
   text
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-// Interface para os dados de cada profissional de saúde
 interface HealthcareProfessional {
   fullName: string;
   specialties: string[];
@@ -32,21 +32,33 @@ interface HealthcareProfessional {
 export default function HomeScreen() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.replace('/auth/login');
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível sair. Tente novamente.');
+    }
+  };
 
   const handleSearch = async () => {
     const professionalsRef = collection(db, 'healthcareProfessionals');
-    let combinedResults: HealthcareProfessional[] = []; // Definindo o tipo dos resultados
+    let combinedResults: HealthcareProfessional[] = [];
 
     const queryNormalized = normalizeText(searchQuery.trim());
 
     const snapshot = await getDocs(professionalsRef);
-    const allProfessionals: HealthcareProfessional[] = snapshot.docs.map(doc => doc.data() as HealthcareProfessional); // Definindo o tipo explicitamente
+    const allProfessionals: HealthcareProfessional[] = snapshot.docs.map(
+      doc => doc.data() as HealthcareProfessional
+    );
 
     if (queryNormalized) {
       const results = allProfessionals.filter(prof => {
-        const name = normalizeText(prof.fullName || '');  // Garante que 'name' sempre será uma string
-        const specialties = (prof.specialties || []).map((s: string) => normalizeText(s));  // Garante que 'specialties' seja um array de strings
-        const places = (prof.placesOfService || []).map((p: string) => normalizeText(p));  // Garante que 'places' seja um array de strings
+        const name = normalizeText(prof.fullName || '');
+        const specialties = (prof.specialties || []).map((s: string) => normalizeText(s));
+        const places = (prof.placesOfService || []).map((p: string) => normalizeText(p));
 
         return (
           name.includes(queryNormalized) ||
@@ -55,7 +67,6 @@ export default function HomeScreen() {
         );
       });
 
-      // Remover duplicatas pelo email
       const uniqueMap = new Map();
       results.forEach(item => uniqueMap.set(item.emailContact, item));
       combinedResults = Array.from(uniqueMap.values());
@@ -80,12 +91,20 @@ export default function HomeScreen() {
             <Text style={styles.appTitleText}>MedFinder</Text>
           </View>
           <View style={styles.iconsContainer}>
+            {/* Botão de logout */}
+            <TouchableOpacity onPress={handleLogout} style={{ marginRight: 10 }}>
+              <Feather name="log-out" size={24} color="#fff" />
+            </TouchableOpacity>
+
+            {/* Foto de perfil */}
             <TouchableOpacity onPress={() => router.push('/profile/edit')}>
               <Image
                 source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
                 style={styles.profileImage}
               />
             </TouchableOpacity>
+
+            {/* Ícone de notificações (opcional) */}
             <TouchableOpacity>
               <Feather name="bell" size={24} color="#fff" />
             </TouchableOpacity>
@@ -95,7 +114,7 @@ export default function HomeScreen() {
         {/* Saudação */}
         <Text style={styles.greetingText}>Seja bem-vindo, Usuário!</Text>
 
-        {/* Search */}
+        {/* Campo de busca */}
         <View style={styles.searchContainer}>
           <Text style={styles.searchLabel}>O que você procura?</Text>
           <View style={styles.searchBar}>
