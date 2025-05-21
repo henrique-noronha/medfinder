@@ -7,8 +7,6 @@ import { Calendar } from 'react-native-calendars';
 import styles, { gradientColors } from './styles/scheduleStyles';
 
 import { getAuth } from 'firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
 
 export default function ScheduleScreen() {
   const router = useRouter();
@@ -33,7 +31,7 @@ export default function ScheduleScreen() {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  const handleSchedule = async () => {
+  const handleSchedule = () => {
     if (!user) {
       Alert.alert('Erro', 'Você precisa estar logado para agendar.');
       return;
@@ -44,23 +42,18 @@ export default function ScheduleScreen() {
       return;
     }
 
-    try {
-      await addDoc(collection(db, 'appointments'), {
-        userId: user.uid,
-        userEmail: user.email,
-        professionalName: fullName,
-        professionalEmail: emailContact,
+    // Substituir a tela atual para evitar retorno a ela
+    router.replace({
+      pathname: '/selectTime',
+      params: {
         date: selectedDate,
-        status: 'pendente',
-        createdAt: new Date()
-      });
-
-      Alert.alert('Sucesso', 'Solicitação de agendamento enviada!');
-      router.back();
-    } catch (error) {
-      console.error('Erro ao agendar:', error);
-      Alert.alert('Erro', 'Não foi possível agendar. Tente novamente.');
-    }
+        fullName,
+        emailContact,
+        phone,
+        specialties,
+        placesOfService,
+      },
+    });
   };
 
   return (
@@ -69,7 +62,7 @@ export default function ScheduleScreen() {
 
       {/* Cabeçalho com ícone de voltar e título */}
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.push('/search')}>
           <Feather name="arrow-left" size={24} color="#fff" />
         </TouchableOpacity>
 
@@ -84,6 +77,7 @@ export default function ScheduleScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
+        {/* Círculo com inicial do nome */}
         <View style={styles.avatarCircle}>
           <Text style={styles.avatarText}>
             {fullName?.trim()[0].toUpperCase()}
@@ -121,7 +115,7 @@ export default function ScheduleScreen() {
           style={styles.scheduleButton}
           onPress={handleSchedule}
         >
-          <Text style={styles.scheduleButtonText}>Confirmar Agendamento</Text>
+          <Text style={styles.scheduleButtonText}>Avançar para Horário</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

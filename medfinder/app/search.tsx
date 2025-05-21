@@ -151,7 +151,7 @@ export default function SearchResultsScreen() {
               style={styles.resultCard}
               onPress={() =>
                 router.push({
-                  pathname: '/schedule',
+                  pathname: '/scheduleUser',
                   params: {
                     fullName: professional.fullName,
                     emailContact: professional.emailContact,
