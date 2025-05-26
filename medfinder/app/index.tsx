@@ -1,8 +1,11 @@
-
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
-import { indexStyles as styles } from './styles/indexstyles';
+import { indexStyles as styles } from './styles/indexstyles'; // Verifique se este caminho está correto
 import { LinearGradient } from 'expo-linear-gradient';
+
+// Se você estiver usando TypeScript e exportou gradientColors de indexStyles.ts,
+// você pode importá-lo assim, caso precise aqui:
+// import { gradientColors } from './styles/indexstyles';
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -10,7 +13,7 @@ export default function WelcomeScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#64C1FF', '#3C7499']}
+        colors={['#64C1FF', '#3C7499']} 
         style={styles.backgroundGradient}
       />
 
@@ -20,13 +23,17 @@ export default function WelcomeScreen() {
         e cuidar do seu bem-estar. Conectamos você ao atendimento ideal, sem complicação
       </Text>
 
-      <View style={styles.logo}>
-        <Text style={styles.logoText}>MedFinder</Text>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../assets/images/logo3.png')}
+          style={styles.logoImage}
+        />
       </View>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.replace('/auth/login' as const)}>
+        onPress={() => router.replace('/auth/login' as const)} 
+      >
         <Text style={styles.buttonText}>Entrar no aplicativo</Text>
       </TouchableOpacity>
 
