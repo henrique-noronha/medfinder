@@ -75,7 +75,7 @@ export default function HomeProfissionalScreen() {
 
         {/* Cards */}
         <View style={styles.cardsContainer}>
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => router.push('/history-profissional')}>
             <FontAwesome5 name="book-open" size={28} color="#444" style={styles.cardIcon} />
             <Text style={styles.cardText}>Histórico</Text>
           </TouchableOpacity>
