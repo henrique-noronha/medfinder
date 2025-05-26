@@ -1,9 +1,9 @@
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { loginStyles as styles, gradientColors } from '../styles/loginstyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
-import { auth, db } from '../../firebaseConfig';
+import { auth, db } from '../../firebaseConfig'; // Confirme se o caminho para firebaseConfig está correto
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -30,10 +30,13 @@ export default function LoginScreen() {
 
         if (userData.role === 'admin') {
           Alert.alert('Sucesso', 'Bem-vindo, administrador!');
-          router.replace('/auth/admin-dashboard'); // ajuste essa rota conforme seu projeto
+          router.replace('/auth/admin-dashboard'); // Verifique esta rota
+        } else if (userData.role === 'profissional') {
+          Alert.alert('Sucesso', 'Bem-vindo, profissional!');
+          router.replace('/home-profissional'); // Verifique esta rota
         } else {
           Alert.alert('Sucesso', 'Login realizado com sucesso!');
-          router.replace('/home');
+          router.replace('/home'); // Verifique esta rota
         }
       } else {
         Alert.alert('Erro', 'Usuário não encontrado no Firestore.');
@@ -48,8 +51,12 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <LinearGradient colors={gradientColors} style={styles.backgroundGradient} />
 
-      <View style={styles.logo}>
-        <Text style={styles.logoText}>MedFinder</Text>
+      <View style={styles.logoContainer}>
+        <Image
+          // Certifique-se que este caminho está correto para sua logo3.png
+          source={require('../../assets/images/logo3.png')}
+          style={styles.logoImage}
+        />
       </View>
 
       <Text style={styles.title}>
@@ -79,10 +86,7 @@ export default function LoginScreen() {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleLogin}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
 

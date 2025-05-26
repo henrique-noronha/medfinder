@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import { getAuth } from 'firebase/auth';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import styles, { gradientColors } from './styles/pendingStyles';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,35 +17,27 @@ type Appointment = {
   status: string;
 };
 
-export default function PendingScreen() {
+export default function HistoryScreen() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
-  const [homeRoute, setHomeRoute] = useState('/home');
   const auth = getAuth();
   const user = auth.currentUser;
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchUserRoleAndPending() {
+    async function fetchHistory() {
       if (!user) {
         setAppointments([]);
         setLoading(false);
         return;
       }
 
-      // Checar a role para definir a rota correta
-      const userRef = doc(db, 'users', user.uid);
-      const userSnap = await getDoc(userRef);
-      const role = userSnap.exists() ? userSnap.data()?.role : null;
-      setHomeRoute(role === 'profissional' ? '/home-profissional' : '/home');
-
-      // Buscar pendências
       try {
         const appointmentsRef = collection(db, 'appointments');
         const q = query(
           appointmentsRef,
           where('userId', '==', user.uid),
-          
+          where('status', 'in', ['confirmada', 'cancelada'])
         );
         const querySnapshot = await getDocs(q);
         const list = querySnapshot.docs.map(doc => ({
@@ -55,12 +47,12 @@ export default function PendingScreen() {
 
         setAppointments(list);
       } catch (error) {
-        console.error('Erro ao buscar consultas pendentes:', error);
+        console.error('Erro ao buscar histórico de consultas:', error);
       }
       setLoading(false);
     }
 
-    fetchUserRoleAndPending();
+    fetchHistory();
   }, [user]);
 
   if (loading) {
@@ -82,7 +74,7 @@ export default function PendingScreen() {
           <Feather name="arrow-left" size={24} color="#fff" />
         </TouchableOpacity>
 
-        <Text style={styles.pageTitle}>Consultas Pendentes</Text>
+        <Text style={styles.pageTitle}>Histórico de Consultas</Text>
 
         <TouchableOpacity onPress={() => router.push('/profile/edit')}>
           <Image
@@ -95,7 +87,7 @@ export default function PendingScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         {appointments.length === 0 ? (
           <Text style={{ color: '#fff', marginTop: 40, fontSize: 18, textAlign: 'center' }}>
-            Você não possui consultas pendentes.
+            Você não possui histórico de consultas.
           </Text>
         ) : (
           appointments.map((app) => (

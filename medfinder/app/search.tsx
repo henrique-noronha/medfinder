@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from 'reac
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import styles, { gradientColors } from './styles/searchStyles';
 
@@ -15,6 +15,13 @@ type Professional = {
   placesOfService: string[];
 };
 
+// Função para remover acentos e colocar tudo minúsculo
+const normalizeText = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
 export default function SearchResultsScreen() {
   const router = useRouter();
   const { results } = useLocalSearchParams();
@@ -23,7 +30,6 @@ export default function SearchResultsScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Professional[]>(initialResults);
 
-  // Filtro
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [filterSpecialty, setFilterSpecialty] = useState('');
@@ -34,31 +40,32 @@ export default function SearchResultsScreen() {
     const allSnapshot = await getDocs(professionalsRef);
     const allData = allSnapshot.docs.map(doc => doc.data() as Professional);
 
+    const queryNormalized = normalizeText(searchQuery.trim());
+
     const filtered = allData.filter(prof => {
-      const matchesQuery = searchQuery
-        ? prof.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          prof.specialties.some(spec =>
-            spec.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+      const matchesSearchQuery = queryNormalized
+        ? normalizeText(prof.fullName).includes(queryNormalized) ||
+          prof.specialties.some(spec => normalizeText(spec).includes(queryNormalized)) ||
+          prof.placesOfService.some(place => normalizeText(place).includes(queryNormalized))
         : true;
 
       const matchesName = filterName
-        ? prof.fullName.toLowerCase().includes(filterName.toLowerCase())
+        ? normalizeText(prof.fullName).includes(normalizeText(filterName))
         : true;
 
       const matchesSpecialty = filterSpecialty
         ? prof.specialties.some(spec =>
-            spec.toLowerCase().includes(filterSpecialty.toLowerCase())
+            normalizeText(spec).includes(normalizeText(filterSpecialty))
           )
         : true;
 
       const matchesPlace = filterPlace
         ? prof.placesOfService.some(place =>
-            place.toLowerCase().includes(filterPlace.toLowerCase())
+            normalizeText(place).includes(normalizeText(filterPlace))
           )
         : true;
 
-      return matchesQuery && matchesName && matchesSpecialty && matchesPlace;
+      return matchesSearchQuery && matchesName && matchesSpecialty && matchesPlace;
     });
 
     setSearchResults(filtered);
@@ -139,7 +146,22 @@ export default function SearchResultsScreen() {
       <ScrollView contentContainerStyle={styles.resultsContainer}>
         {searchResults.length > 0 ? (
           searchResults.map((professional, index) => (
-            <View key={index} style={styles.resultCard}>
+            <TouchableOpacity
+              key={index}
+              style={styles.resultCard}
+              onPress={() =>
+                router.push({
+                  pathname: '/scheduleUser',
+                  params: {
+                    fullName: professional.fullName,
+                    emailContact: professional.emailContact,
+                    phone: professional.phone,
+                    specialties: JSON.stringify(professional.specialties),
+                    placesOfService: JSON.stringify(professional.placesOfService),
+                  },
+                })
+              }
+            >
               <View style={styles.avatarCircle}>
                 <Text style={styles.avatarText}>
                   {professional.fullName.trim()[0].toUpperCase()}
@@ -160,7 +182,7 @@ export default function SearchResultsScreen() {
                   Atende em: {professional.placesOfService.join(', ')}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <Text style={styles.noResultsText}>Nenhum profissional encontrado.</Text>

@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   headerContainer: {
-    paddingTop: 50,            // ajustar pro notch
+    paddingTop: 50, // ajustar pro notch
     paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -22,17 +22,17 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  iconsContainer: {     // <<<<< novo
+  iconsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
   profileImage: {
-    width: 50, // ou outro valor desejado
-    height: 50, // ou outro valor desejado
-    borderRadius: 25, // metade do tamanho da largura/altura para criar o efeito circular
-    borderWidth: 2, // borda, se necessário
-    borderColor: '#fff', // cor da borda
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: '#fff',
   },
   greetingText: {
     color: '#fff',
@@ -100,4 +100,5 @@ export default StyleSheet.create({
     fontWeight: '600',
     color: '#333',
   },
+
 });
