@@ -30,7 +30,10 @@ export default function LoginScreen() {
 
         if (userData.role === 'admin') {
           Alert.alert('Sucesso', 'Bem-vindo, administrador!');
-          router.replace('/auth/admin-dashboard'); // ajuste essa rota conforme seu projeto
+          router.replace('/auth/admin-dashboard');
+        } else if (userData.role === 'profissional') {
+          Alert.alert('Sucesso', 'Bem-vindo, profissional!');
+          router.replace('/home-profissional');
         } else {
           Alert.alert('Sucesso', 'Login realizado com sucesso!');
           router.replace('/home');
@@ -79,10 +82,7 @@ export default function LoginScreen() {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleLogin}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
 

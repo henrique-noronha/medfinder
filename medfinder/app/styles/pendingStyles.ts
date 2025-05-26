@@ -72,4 +72,18 @@ export default StyleSheet.create({
     color: 'darkorange',
     textTransform: 'capitalize',
   },
+  button: {
+  backgroundColor: '#fff',
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  borderRadius: 10,
+  marginTop: 10,
+  alignItems: 'center',
+  },
+
+buttonText: {
+  color: '#3167AF',
+  fontWeight: 'bold',
+  fontSize: 16,
+},
 });
