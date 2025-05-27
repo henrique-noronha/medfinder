@@ -30,13 +30,13 @@ export default function LoginScreen() {
 
         if (userData.role === 'admin') {
           Alert.alert('Sucesso', 'Bem-vindo, administrador!');
-          router.replace('/auth/admin-dashboard'); // Verifique esta rota
+          router.replace('/auth/admin-dashboard'); 
         } else if (userData.role === 'profissional') {
           Alert.alert('Sucesso', 'Bem-vindo, profissional!');
-          router.replace('/home-profissional'); // Verifique esta rota
+          router.replace('/home-profissional'); 
         } else {
           Alert.alert('Sucesso', 'Login realizado com sucesso!');
-          router.replace('/home'); // Verifique esta rota
+          router.replace('/home');
         }
       } else {
         Alert.alert('Erro', 'Usuário não encontrado no Firestore.');

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { auth, db } from '../../firebaseConfig';
@@ -32,15 +32,18 @@ export default function AdminDashboard() {
 
   const handleLogout = async () => {
     await signOut(auth);
-    router.replace('/'); // volta pra tela inicial/login
+    router.replace('/'); 
   };
 
   return (
     <View style={styles.container}>
       <LinearGradient colors={gradientColors} style={styles.backgroundGradient} />
 
-      <View style={styles.logo}>
-        <Text style={styles.logoText}>MedFinder</Text>
+      <View style={styles.logoContainer}>
+              <Image
+                source={require('../../assets/images/logo3.png')}
+                style={styles.logoImage}
+              />
       </View>
 
       <Text style={styles.title}>Painel Administrativo</Text>

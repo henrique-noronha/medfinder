@@ -145,9 +145,7 @@ export default function RegisterProfessionalScreen() {
     <View style={{ flex: 1 }}>
       <LinearGradient colors={gradientColors} style={styles.backgroundGradient} />
       <ScrollView contentContainerStyle={[styles.container, { flexGrow: 1 }]}>
-        <View style={styles.logo}>
-          <Text style={styles.logoText}>MedFinder Pro</Text>
-        </View>
+      
 
         <Text style={styles.title}>
           Cadastro de <Text style={styles.strong}>Profissional</Text>
