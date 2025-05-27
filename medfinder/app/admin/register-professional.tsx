@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView, Modal } from 'react-native';
+// admin/register-professional.tsx
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { registerStyles as styles, gradientColors } from '../styles/registerstyles';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState } from 'react';
 import { db } from '../../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { Picker } from '@react-native-picker/picker';
@@ -10,7 +11,6 @@ import { Picker } from '@react-native-picker/picker';
 export default function RegisterProfessionalScreen() {
   const router = useRouter();
 
-  // Campos de entrada necessários
   const [fullName, setFullName] = useState('');
   const [cpf, setCpf] = useState('');
   const [birthDate, setBirthDate] = useState('');
@@ -20,19 +20,18 @@ export default function RegisterProfessionalScreen() {
   const [placesOfService, setPlacesOfService] = useState<string[]>([]);
   const [acceptsInsurance, setAcceptsInsurance] = useState('');
   const [specialties, setSpecialties] = useState<string[]>([]);
+  const [authUid, setAuthUid] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
 
-  // Modal para locais de atendimento
   const [addressModalVisible, setAddressModalVisible] = useState(false);
   const [city, setCity] = useState('');
-  const [state, setState] = useState('');
+  const [stateValue, setStateValue] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [street, setStreet] = useState('');
 
-  // Modal para especializações
   const [specialtyModalVisible, setSpecialtyModalVisible] = useState(false);
   const [newSpecialty, setNewSpecialty] = useState('');
 
-  // Formatação de CPF no formato 000.000.000-00
   const formatCpf = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 11);
     if (digits.length <= 3) return digits;
@@ -41,7 +40,6 @@ export default function RegisterProfessionalScreen() {
     return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
   };
 
-  // Formatação de telefone no formato (00) 0 0000-0000
   const formatPhone = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 11);
     if (digits.length <= 2) return `(${digits}`;
@@ -50,7 +48,6 @@ export default function RegisterProfessionalScreen() {
     return `(${digits.slice(0, 2)}) ${digits.slice(2, 3)} ${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
   };
 
-  // Formatação de data no formato DD/MM/AAAA
   const formatBirthDate = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 8);
     if (digits.length <= 2) return digits;
@@ -58,24 +55,29 @@ export default function RegisterProfessionalScreen() {
     return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
   };
 
-  // Função para remover um endereço da lista
   const removeAddress = (index: number) => {
     setPlacesOfService((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Função para remover uma especialização da lista
   const removeSpecialty = (index: number) => {
     setSpecialties((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleRegister = async () => {
-    try {
-      if (!fullName || !cpf || !birthDate || !gender || !phone || !emailContact || placesOfService.length === 0 || specialties.length === 0) {
-        Alert.alert('Erro', 'Preencha todos os campos.');
-        return;
-      }
+    if (!fullName || !cpf || !birthDate || !gender || !phone || !emailContact || placesOfService.length === 0 || specialties.length === 0 || !authUid.trim()) {
+      Alert.alert('Erro', 'Preencha todos os campos obrigatórios, incluindo o Auth UID do Profissional.');
+      return;
+    }
 
-      const professionalId = `${fullName}-${Date.now()}`;
+    if (authUid.trim().length < 20) { // UIDs do Firebase geralmente têm 28 caracteres
+        Alert.alert('Erro', 'O Auth UID do Profissional parece inválido. Verifique o valor inserido.');
+        return;
+    }
+    setIsRegistering(true);
+    try {
+      const trimmedAuthUid = authUid.trim();
+      const professionalId = `${fullName.replace(/\s+/g, '-')}-${Date.now()}`;
+
       await setDoc(doc(db, 'healthcareProfessionals', professionalId), {
         fullName,
         cpf,
@@ -86,38 +88,55 @@ export default function RegisterProfessionalScreen() {
         specialties,
         placesOfService,
         acceptsInsurance: acceptsInsurance === 'Sim',
+        authUid: trimmedAuthUid,
       });
 
-      Alert.alert('Sucesso', 'Profissional cadastrado com sucesso!');
+      const userDocRef = doc(db, 'users', trimmedAuthUid);
+      const userDataForUsersCollection = {
+        email: emailContact, // Este será o email no doc 'users'. Idealmente, seria o email de login do Auth.
+        fullName: fullName,
+        role: 'profissional',
+        cpf: cpf,
+        // Se você quiser adicionar um timestamp de quando o perfil foi completado/verificado pelo admin:
+        // profileLastUpdatedByAdminAt: serverTimestamp(),
+      };
+
+      await setDoc(userDocRef, userDataForUsersCollection, { merge: true });
+
+      Alert.alert('Sucesso', 'Profissional cadastrado e vinculado com sucesso!');
+      // Limpar campos após o sucesso
+      setFullName(''); setCpf(''); setBirthDate(''); setGender(''); setPhone('');
+      setEmailContact(''); setAuthUid(''); setPlacesOfService([]);
+      setSpecialties([]); setAcceptsInsurance('');
       router.replace('../auth/admin-dashboard');
     } catch (error: any) {
-      console.log(error);
-      Alert.alert('Erro no cadastro', error.message);
+      console.error("Erro detalhado no cadastro:", error);
+      Alert.alert('Erro no cadastro', error.message || 'Ocorreu um erro desconhecido. Verifique o console.');
+    } finally {
+      setIsRegistering(false);
     }
   };
 
   const handleAddAddress = () => {
-    if (!city || !state || !zipCode || !street) {
+    if (!city || !stateValue || !zipCode || !street) {
       Alert.alert('Erro', 'Preencha todos os campos do endereço.');
       return;
     }
-
-    const fullAddress = `${street}, ${city}, ${state}, CEP: ${zipCode}`;
+    const fullAddress = `${street}, ${city}, ${stateValue}, CEP: ${zipCode}`;
     setPlacesOfService((prev) => [...prev, fullAddress]);
     setCity('');
-    setState('');
+    setStateValue('');
     setZipCode('');
     setStreet('');
     setAddressModalVisible(false);
   };
 
   const handleAddSpecialty = () => {
-    if (!newSpecialty) {
-      Alert.alert('Erro', 'Digite uma especialização.');
+    if (!newSpecialty.trim()) {
+      Alert.alert('Erro', 'Digite uma especialização válida.');
       return;
     }
-
-    setSpecialties((prev) => [...prev, newSpecialty]);
+    setSpecialties((prev) => [...prev, newSpecialty.trim()]);
     setNewSpecialty('');
     setSpecialtyModalVisible(false);
   };
@@ -142,7 +161,6 @@ export default function RegisterProfessionalScreen() {
             value={fullName}
             onChangeText={setFullName}
           />
-
           <TextInput
             style={styles.input}
             placeholder="CPF"
@@ -151,7 +169,6 @@ export default function RegisterProfessionalScreen() {
             value={cpf}
             onChangeText={(text) => setCpf(formatCpf(text))}
           />
-
           <TextInput
             style={styles.input}
             placeholder="Data de nascimento (DD/MM/AAAA)"
@@ -160,7 +177,15 @@ export default function RegisterProfessionalScreen() {
             value={birthDate}
             onChangeText={(text) => setBirthDate(formatBirthDate(text))}
           />
-
+          <Text style={styles.label}>Auth UID do Profissional (Firebase)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Cole o Auth UID da conta Firebase do profissional"
+            placeholderTextColor="#ccc"
+            value={authUid}
+            onChangeText={setAuthUid}
+            autoCapitalize="none"
+          />
           <Text style={styles.label}>Gênero</Text>
           <Picker
             selectedValue={gender}
@@ -172,7 +197,6 @@ export default function RegisterProfessionalScreen() {
             <Picker.Item label="Feminino" value="Feminino" />
             <Picker.Item label="Outro" value="Outro" />
           </Picker>
-
           <TextInput
             style={styles.input}
             placeholder="Telefone"
@@ -181,17 +205,15 @@ export default function RegisterProfessionalScreen() {
             value={phone}
             onChangeText={(text) => setPhone(formatPhone(text))}
           />
-
           <TextInput
             style={styles.input}
-            placeholder="Email para contato"
+            placeholder="Email para contato (do perfil)"
             placeholderTextColor="#ccc"
             keyboardType="email-address"
             autoCapitalize="none"
             value={emailContact}
             onChangeText={setEmailContact}
           />
-
           <Text style={styles.label}>Locais de Atendimento</Text>
           {placesOfService.map((address, index) => (
             <View key={index} style={styles.listItem}>
@@ -205,9 +227,8 @@ export default function RegisterProfessionalScreen() {
             style={[styles.input, styles.addressInput]}
             onPress={() => setAddressModalVisible(true)}
           >
-            <Text style={{ color: '#000' }}>Adicionar locais de atendimento</Text>
+            <Text style={styles.inputText || {color: '#333'}}>Adicionar locais de atendimento</Text>
           </TouchableOpacity>
-
           <Text style={styles.label}>Especializações</Text>
           {specialties.map((specialty, index) => (
             <View key={index} style={styles.listItem}>
@@ -221,9 +242,8 @@ export default function RegisterProfessionalScreen() {
             style={[styles.input, styles.specialtiesInput]}
             onPress={() => setSpecialtyModalVisible(true)}
           >
-            <Text style={{ color: '#000' }}>Adicionar especializações</Text>
+            <Text style={styles.inputText || {color: '#333'}}>Adicionar especializações</Text>
           </TouchableOpacity>
-
           <Text style={styles.label}>Convênio</Text>
           <Picker
             selectedValue={acceptsInsurance}
@@ -234,89 +254,40 @@ export default function RegisterProfessionalScreen() {
             <Picker.Item label="Sim" value="Sim" />
             <Picker.Item label="Não" value="Não" />
           </Picker>
-
-          <TouchableOpacity style={styles.button} onPress={handleRegister}>
-            <Text style={styles.buttonText}>Cadastrar</Text>
+          <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={isRegistering}>
+            {isRegistering ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Cadastrar Profissional</Text>}
           </TouchableOpacity>
         </View>
 
-        <Modal visible={addressModalVisible} animationType="slide" transparent>
+        <Modal visible={addressModalVisible} animationType="slide" transparent onRequestClose={() => setAddressModalVisible(false)}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Adicionar Local de Atendimento</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Cidade"
-                placeholderTextColor="#ccc"
-                value={city}
-                onChangeText={setCity}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Estado"
-                placeholderTextColor="#ccc"
-                value={state}
-                onChangeText={setState}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="CEP"
-                placeholderTextColor="#ccc"
-                keyboardType="numeric"
-                value={zipCode}
-                onChangeText={setZipCode}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Endereço"
-                placeholderTextColor="#ccc"
-                value={street}
-                onChangeText={setStreet}
-              />
-
-              <TouchableOpacity style={styles.button} onPress={handleAddAddress}>
-                <Text style={styles.buttonText}>Adicionar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: '#ff4444' }]}
-                onPress={() => setAddressModalVisible(false)}
-              >
-                <Text style={styles.buttonText}>Cancelar</Text>
-              </TouchableOpacity>
+              <TextInput style={styles.input} placeholder="Rua, Número, Bairro" value={street} onChangeText={setStreet} />
+              <TextInput style={styles.input} placeholder="Cidade" value={city} onChangeText={setCity} />
+              <TextInput style={styles.input} placeholder="Estado (UF)" value={stateValue} onChangeText={setStateValue} maxLength={2} autoCapitalize="characters" />
+              <TextInput style={styles.input} placeholder="CEP" keyboardType="numeric" value={zipCode} onChangeText={setZipCode} />
+              <TouchableOpacity style={styles.button} onPress={handleAddAddress}><Text style={styles.buttonText}>Adicionar</Text></TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: '#ccc' }]} onPress={() => setAddressModalVisible(false)}><Text style={[styles.buttonText, {color: '#333'}]}>Cancelar</Text></TouchableOpacity>
             </View>
           </View>
         </Modal>
 
-        <Modal visible={specialtyModalVisible} animationType="slide" transparent>
+        <Modal visible={specialtyModalVisible} animationType="slide" transparent onRequestClose={() => setSpecialtyModalVisible(false)}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Adicionar Especialização</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Digite a especialização"
-                placeholderTextColor="#ccc"
-                value={newSpecialty}
-                onChangeText={setNewSpecialty}
-              />
-
-              <TouchableOpacity style={styles.button} onPress={handleAddSpecialty}>
-                <Text style={styles.buttonText}>Adicionar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: '#ff4444' }]}
-                onPress={() => setSpecialtyModalVisible(false)}
-              >
-                <Text style={styles.buttonText}>Cancelar</Text>
-              </TouchableOpacity>
+              <TextInput style={styles.input} placeholder="Nome da Especialização" value={newSpecialty} onChangeText={setNewSpecialty} />
+              <TouchableOpacity style={styles.button} onPress={handleAddSpecialty}><Text style={styles.buttonText}>Adicionar</Text></TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: '#ccc' }]} onPress={() => setSpecialtyModalVisible(false)}><Text style={[styles.buttonText, {color: '#333'}]}>Cancelar</Text></TouchableOpacity>
             </View>
           </View>
         </Modal>
 
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()} style={{marginTop: 20, marginBottom: 40}}>
           <Text style={styles.registerText}>Voltar</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
-  
 }

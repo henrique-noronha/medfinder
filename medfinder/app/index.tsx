@@ -37,7 +37,7 @@ export default function WelcomeScreen() {
         <Text style={styles.buttonText}>Entrar no aplicativo</Text>
       </TouchableOpacity>
 
-      <Text style={styles.version}>v 1.0.0</Text>
+      <Text style={styles.version}>v 1.2.0</Text>
     </View>
   );
 }

@@ -40,7 +40,7 @@ export const indexStyles = StyleSheet.create({
     resizeMode: 'contain',
   },
   button: {
-    backgroundColor: '#F28B50',
+    backgroundColor: '#88E788',
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,

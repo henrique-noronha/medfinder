@@ -53,7 +53,6 @@ export default function LoginScreen() {
 
       <View style={styles.logoContainer}>
         <Image
-          // Certifique-se que este caminho está correto para sua logo3.png
           source={require('../../assets/images/logo3.png')}
           style={styles.logoImage}
         />

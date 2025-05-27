@@ -45,6 +45,8 @@ export default function RootLayout() {
         <Stack.Screen name="selectTime" options={{ headerShown: false }} /> {}
         <Stack.Screen name="pending-profissional" options={{ headerShown: false }} /> {}
         <Stack.Screen name="home-profissional" options={{ headerShown: false }} /> {}
+        <Stack.Screen name="history" options={{ headerShown: false }} /> {}
+        <Stack.Screen name="setAvailability" options={{ headerShown: false }} /> {}
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
