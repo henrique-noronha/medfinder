@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const localStyles = StyleSheet.create({
     loadingContainer: { /* ...como em scheduleStyles... */ flex: 1, justifyContent: 'center', alignItems: 'center'},
@@ -116,7 +116,7 @@ export default StyleSheet.create({
     color: '#fff',
   },
   confirmButton: {
-    backgroundColor: '#88E788',
+    backgroundColor: '#004766',
     paddingVertical: 14,
     borderRadius: 25,
     marginTop: 30,

@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
@@ -17,10 +18,7 @@ import { getAuth, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import styles from './styles/homestyles';
 
 const normalizeText = (text: string) =>
-  text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
+  text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
 interface HealthcareProfessional {
   id?: string;
@@ -51,7 +49,7 @@ export default function HomeScreen() {
           } else {
             setUserName(user.email ? user.email.split('@')[0] : 'Usuário');
           }
-        } catch (error) {
+        } catch {
           setUserName('Usuário');
         }
       } else {
@@ -65,7 +63,7 @@ export default function HomeScreen() {
     try {
       await signOut(auth);
       router.replace('/auth/login');
-    } catch (error) {
+    } catch {
       Alert.alert('Erro', 'Não foi possível sair. Tente novamente.');
     }
   };
@@ -76,35 +74,35 @@ export default function HomeScreen() {
       const queryNormalized = normalizeText(searchQuery.trim());
       const snapshot = await getDocs(professionalsRef);
 
-      const allProfessionals = snapshot.docs.map(
-        (docSnapshot) => {
-            const data = docSnapshot.data();
-            return {
-                id: docSnapshot.id,
-                authUid: data.authUid || '',
-                fullName: data.fullName || '',
-                specialties: data.specialties || [],
-                placesOfService: data.placesOfService || [],
-                emailContact: data.emailContact || '',
-                phone: data.phone || '',
-            } as HealthcareProfessional;
-        }
-      );
+      const allProfessionals = snapshot.docs.map((docSnapshot) => {
+        const data = docSnapshot.data();
+        return {
+          id: docSnapshot.id,
+          authUid: data.authUid || '',
+          fullName: data.fullName || '',
+          specialties: data.specialties || [],
+          placesOfService: data.placesOfService || [],
+          emailContact: data.emailContact || '',
+          phone: data.phone || '',
+        } as HealthcareProfessional;
+      });
 
       let combinedResults: HealthcareProfessional[] = [];
+
       if (queryNormalized) {
-        const results = allProfessionals.filter(prof => {
+        const results = allProfessionals.filter((prof) => {
           const name = normalizeText(prof.fullName || '');
           const specialties = (prof.specialties || []).map((s: string) => normalizeText(s));
           const places = (prof.placesOfService || []).map((p: string) => normalizeText(p));
           return (
             name.includes(queryNormalized) ||
-            specialties.some(s => s.includes(queryNormalized)) ||
-            places.some(p => p.includes(queryNormalized))
+            specialties.some((s) => s.includes(queryNormalized)) ||
+            places.some((p) => p.includes(queryNormalized))
           );
         });
+
         const uniqueMap = new Map<string, HealthcareProfessional>();
-        results.forEach(item => uniqueMap.set(item.id || item.emailContact, item));
+        results.forEach((item) => uniqueMap.set(item.id || item.emailContact, item));
         combinedResults = Array.from(uniqueMap.values());
       } else {
         combinedResults = allProfessionals;
@@ -117,20 +115,23 @@ export default function HomeScreen() {
           initialQuery: searchQuery.trim(),
         },
       });
-    } catch (error) {
-        Alert.alert("Erro na Busca", "Não foi possível realizar a busca no momento.");
+    } catch {
+      Alert.alert('Erro na Busca', 'Não foi possível realizar a busca no momento.');
     }
   };
 
   return (
-    <LinearGradient colors={['#64C1FF', '#3C7499']} style={styles.container}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
+      <LinearGradient colors={['#004766', '#bfecff']} style={StyleSheet.absoluteFill} />
+
+      <ScrollView
+        style={{ zIndex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.headerContainer}>
-          <View style={styles.logoContainer}> 
-            <Image
-              source={require('../assets/images/logo3.png')}
-              style={styles.logoImage}
-            />
+          <View style={styles.logoContainer}>
+            <Image source={require('../assets/images/logo3.png')} style={styles.logoImage} />
           </View>
           <View style={styles.iconsContainer}>
             <TouchableOpacity onPress={handleLogout} style={{ marginRight: 10 }}>
@@ -138,11 +139,18 @@ export default function HomeScreen() {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push('/profile/edit')}>
               <Image
-                source={{ uri: auth.currentUser?.photoURL || 'https://randomuser.me/api/portraits/men/1.jpg' }}
+                source={{
+                  uri:
+                    auth.currentUser?.photoURL ||
+                    'https://randomuser.me/api/portraits/men/1.jpg',
+                }}
                 style={styles.profileImage}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => Alert.alert("Notificações", "Nenhuma nova notificação.")} style={{ marginLeft: 10 }}>
+            <TouchableOpacity
+              onPress={() => Alert.alert('Notificações', 'Nenhuma nova notificação.')}
+              style={{ marginLeft: 10 }}
+            >
               <Feather name="bell" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
@@ -162,7 +170,7 @@ export default function HomeScreen() {
               onSubmitEditing={handleSearch}
             />
             <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-              <Feather name="search" size={20} color="#fff" />
+              <Feather name="search" size={25} color="#000" />
             </TouchableOpacity>
           </View>
         </View>
@@ -186,6 +194,6 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 }

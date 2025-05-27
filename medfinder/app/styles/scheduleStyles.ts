@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const localStyles = StyleSheet.create({
   loadingContainer: {
@@ -117,7 +117,7 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   scheduleButton: {
-    backgroundColor: '#88E788', 
+    backgroundColor: '#004766', 
     paddingVertical: 14,
     borderRadius: 25, 
     marginTop: 30, 

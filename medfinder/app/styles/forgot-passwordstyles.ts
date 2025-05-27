@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const forgotPasswordStyles = StyleSheet.create({
   container: {
@@ -51,7 +51,7 @@ export const forgotPasswordStyles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#88E788',
+    backgroundColor: '#004766',
     paddingVertical: 14,
     paddingHorizontal: 36,
     borderRadius: 10,
@@ -65,7 +65,7 @@ export const forgotPasswordStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   registerText: {
-    color: '#fff',
+    color: '#000',
     marginTop: 16,
     textDecorationLine: 'underline',
   },

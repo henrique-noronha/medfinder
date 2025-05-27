@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const indexStyles = StyleSheet.create({
   container: {
@@ -40,7 +40,7 @@ export const indexStyles = StyleSheet.create({
     resizeMode: 'contain',
   },
   button: {
-    backgroundColor: '#88E788',
+    backgroundColor: '#004766',
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
@@ -54,7 +54,7 @@ export const indexStyles = StyleSheet.create({
   },
   version: {
     fontSize: 12,
-    color: '#fff',
+    color: '#000',
     position: 'absolute',
     bottom: 10,
   },

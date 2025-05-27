@@ -55,7 +55,7 @@ export default function HomeProfissionalScreen() {
 
 
   return (
-    <LinearGradient colors={['#71C9F8', '#3167AF']} style={styles.container}>
+    <LinearGradient colors={['#004766', '#bfecff']} style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
         <View style={styles.headerContainer}>
           <View style={styles.logoContainer}>

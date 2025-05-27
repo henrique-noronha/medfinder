@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export const gradientColors = ['#64C1FF', '#3C7499'] as const;
+export const gradientColors = ['#004766', '#bfecff'] as const;
 
 export default StyleSheet.create({
   
@@ -126,7 +126,7 @@ export default StyleSheet.create({
   },
   saveButton: {
     marginTop: 30,
-    backgroundColor: '#88E788', 
+    backgroundColor: '#004766', 
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

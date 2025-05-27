@@ -13,7 +13,7 @@ export const navigationOptions = {
 
 export default function ResultsScreen() {
   return (
-    <LinearGradient colors={['#71C9F8', '#3167AF']} style={styles.container}>
+    <LinearGradient colors={['#004766', '#bfecff']} style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Resultados de Exames</Text>
         <Text style={styles.message}>

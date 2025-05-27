@@ -1,7 +1,7 @@
 // app/styles/setAvailabilityStyles.ts
 import { StyleSheet } from 'react-native';
 
-export const gradientColors = ['#64C1FF', '#3C7499'] as const;
+export const gradientColors = ['#004766', '#bfecff'] as const;
 
 const styles = StyleSheet.create({
   container: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   saveButton: {
-    backgroundColor: '#88E788',
+    backgroundColor: '#004766',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',

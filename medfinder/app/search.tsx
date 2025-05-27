@@ -156,7 +156,7 @@ export default function SearchResultsScreen() {
             onSubmitEditing={handleSearchButtonPress}
           />
           <TouchableOpacity style={styles.searchButton} onPress={handleSearchButtonPress}>
-            <Feather name="search" size={20} color="#fff" />
+            <Feather name="search" size={25} color="#000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.filterButton} onPress={() => setFilterVisible(true)}>
             <Feather name="filter" size={20} color="#fff" />

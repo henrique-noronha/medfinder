@@ -57,7 +57,7 @@ export default function ForgotPasswordScreen() {
 
       <View style={styles.logoContainer}>
         <Image
-          source={require('../../assets/images/logo3.png')} // Ajuste o caminho se necessário
+          source={require('../../assets/images/logo3.png')} 
           style={styles.logoImage}
         />
       </View>
@@ -83,7 +83,7 @@ export default function ForgotPasswordScreen() {
           disabled={isLoading}
         >
           {isLoading ? (
-            <ActivityIndicator color="#fff" size="small" /> // size="small" é comum para botões
+            <ActivityIndicator color="#fff" size="small" />
           ) : (
             <Text style={styles.buttonText}>Enviar link de recuperação</Text>
           )}

@@ -1,7 +1,7 @@
 // app/styles/pendingStyles.ts
 import { StyleSheet } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export default StyleSheet.create({
   container: {

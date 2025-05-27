@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 const searchStyles = StyleSheet.create({
   container: {
@@ -57,7 +57,7 @@ const searchStyles = StyleSheet.create({
   },
   searchButton: {
     marginLeft: 10,
-    backgroundColor: '#88E788',
+    backgroundColor: '#fff',
     width: 38,
     height: 38,
     borderRadius: 19,

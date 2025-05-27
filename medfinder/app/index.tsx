@@ -13,7 +13,7 @@ export default function WelcomeScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#64C1FF', '#3C7499']} 
+        colors={['#004766', '#bfecff']} 
         style={styles.backgroundGradient}
       />
 
