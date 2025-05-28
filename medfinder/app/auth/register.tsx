@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert, Image } from 'react-native'; // Adicionado Image
 import { useRouter } from 'expo-router';
 import { registerStyles as styles, gradientColors } from '../styles/registerstyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
-import { auth, db } from '../../firebaseConfig'; // <-- Certifique-se de importar 'db'
-import { createUserWithEmailAndPassword } from 'firebase/auth'; // <-- função de cadastro
-import { doc, setDoc } from 'firebase/firestore'; // <-- Importe 'doc' e 'setDoc'
+import { auth, db } from '../../firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [fullName, setFullName] = useState(''); // caso queiramos salvar o nome também
+  const [fullName, setFullName] = useState('');
 
   const formatCpf = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 11);
@@ -32,6 +32,10 @@ export default function RegisterScreen() {
   };
 
   const handleRegister = async () => {
+    if (!fullName.trim() || !email.trim() || !password.trim() || !cpf.trim()) {
+      Alert.alert('Erro', 'Todos os campos são obrigatórios.');
+      return;
+    }
     if (password !== confirmPassword) {
       Alert.alert('Erro', 'As senhas não coincidem.');
       return;
@@ -41,18 +45,16 @@ export default function RegisterScreen() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       if (user) {
-        // Salva os dados adicionais do usuário no Firestore
         await setDoc(doc(db, 'users', user.uid), {
           fullName: fullName,
           cpf: cpf,
           email: email,
-          // Adicione outros campos que você queira salvar
+          role: 'paciente', // Definindo uma role padrão para novos usuários
         });
         Alert.alert('Sucesso', 'Conta criada com sucesso!');
-        router.replace('/auth/login'); // Leva pro login após registro
+        router.replace('/auth/login'); 
       }
     } catch (error: any) {
-      console.log(error);
       Alert.alert('Erro no cadastro', error.message);
     }
   };
@@ -61,8 +63,11 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       <LinearGradient colors={gradientColors} style={styles.backgroundGradient} />
 
-      <View style={styles.logo}>
-        <Text style={styles.logoText}>MedFinder</Text>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../assets/images/logo3.png')}
+          style={styles.logoImage}
+        />
       </View>
 
       <Text style={styles.title}>
@@ -77,7 +82,6 @@ export default function RegisterScreen() {
           value={fullName}
           onChangeText={setFullName}
         />
-
         <TextInput
           style={styles.input}
           placeholder="CPF"
@@ -85,8 +89,8 @@ export default function RegisterScreen() {
           keyboardType="numeric"
           value={cpf}
           onChangeText={(text) => setCpf(formatCpf(text))}
+          maxLength={14}
         />
-
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -96,16 +100,14 @@ export default function RegisterScreen() {
           value={email}
           onChangeText={setEmail}
         />
-
         <TextInput
           style={styles.input}
-          placeholder="Senha"
+          placeholder="Senha (mínimo 6 caracteres)"
           placeholderTextColor="#ccc"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
         />
-
         <TextInput
           style={styles.input}
           placeholder="Confirmar senha"
@@ -114,7 +116,6 @@ export default function RegisterScreen() {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
         />
-
         <TouchableOpacity
           style={styles.button}
           onPress={handleRegister}>

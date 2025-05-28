@@ -13,7 +13,7 @@ export const navigationOptions = {
 
 export default function HelpScreen() {
   return (
-    <LinearGradient colors={['#71C9F8', '#3167AF']} style={styles.container}>
+    <LinearGradient colors={['#004766', '#bfecff']} style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Ajuda</Text>
         <Text style={styles.paragraph}>

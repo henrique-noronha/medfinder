@@ -1,24 +1,36 @@
-import { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  Image, 
+  Alert, 
+  ActivityIndicator, 
+  ScrollView
+} from 'react-native';
+import { Ionicons, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { auth, db } from '../../firebaseConfig'; 
+import { signOut } from 'firebase/auth';         
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import styles, { gradientColors } from '../styles/editstyles';
+
 export default function EditProfile() {
   const router = useRouter();
-
   const [cpf, setCpf] = useState('');
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [senha, setSenha] = useState(''); 
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      setLoading(true);
+      setIsLoadingData(true);
       setError(null);
       try {
         if (auth.currentUser) {
@@ -30,32 +42,43 @@ export default function EditProfile() {
             setCpf(userData.cpf || '');
             setEmail(userData.email || '');
             setTelefone(userData.telefone || ''); 
+            setUserRole(userData.role || 'paciente'); 
           } else {
             setError('Dados do usuário não encontrados.');
+            setUserRole('paciente'); 
           }
         } else {
           setError('Usuário não autenticado.');
-          router.replace('/auth/login'); // Redireciona para o login se não estiver autenticado
+          router.replace('/auth/login');
         }
       } catch (e: any) {
-        console.error('Erro ao buscar dados do usuário:', e);
         setError('Erro ao buscar dados do usuário.');
+        setUserRole('paciente'); 
       } finally {
-        setLoading(false);
+        setIsLoadingData(false);
       }
     };
-
     fetchUserData();
-  }, []);
+  }, [router]);
+
+  const handleLogout = async () => { 
+    try {
+      await signOut(auth);
+      router.replace('/auth/login');
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível sair. Tente novamente.');
+    }
+  };
 
   const handleSaveProfile = async () => {
-    if (loading || !auth.currentUser) {
-      return;
+    if (isSaving || !auth.currentUser) return;
+    if (!nome.trim() || !telefone.trim()) {
+        Alert.alert("Campos Obrigatórios", "Nome e telefone são obrigatórios.");
+        return;
     }
 
-    setLoading(true);
+    setIsSaving(true);
     setError(null);
-
     try {
       const userDocRef = doc(db, 'users', auth.currentUser.uid);
       await updateDoc(userDocRef, {
@@ -63,56 +86,109 @@ export default function EditProfile() {
         telefone: telefone, 
       });
       Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
-      router.back(); // Ou navegue para outra tela
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        const homePath = userRole === 'profissional' ? '/home-profissional' : '/home';
+        router.replace(homePath);
+      }
     } catch (e: any) {
-      console.error('Erro ao atualizar o perfil:', e);
       Alert.alert('Erro', 'Erro ao atualizar o perfil.');
       setError('Erro ao atualizar o perfil.');
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
-  if (loading) {
-    return <View><Text>Carregando dados...</Text></View>;
+  const handleHeaderBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      const homePath = userRole === 'profissional' ? '/home-profissional' : '/home';
+      router.replace(homePath);
+    }
+  };
+
+  if (isLoadingData) {
+    return (
+      <LinearGradient colors={gradientColors} style={styles.container}>
+        <View style={styles.centeredMessage}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+          <Text style={styles.centeredMessageText}>Carregando dados...</Text>
+        </View>
+      </LinearGradient>
+    );
   }
 
-  if (error) {
-    return <View><Text>Erro: {error}</Text></View>;
+  if (error && !isLoadingData) {
+    return (
+      <LinearGradient colors={gradientColors} style={styles.container}>
+        <View style={styles.centeredMessage}>
+          <Text style={styles.centeredMessageText}>Erro: {error}</Text>
+           <TouchableOpacity 
+             onPress={() => router.replace(userRole === 'profissional' ? '/home-profissional' : '/home')} 
+             style={{marginTop: 20}}
+           >
+                <Text style={{color: '#fff', textDecorationLine: 'underline'}}>Voltar para Home</Text>
+           </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    );
   }
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back('/home')}>
-          <Ionicons name="arrow-back" size={28} color="black" />
-        </TouchableOpacity>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>MedFinder</Text>
+    <LinearGradient colors={gradientColors} style={styles.container}>
+      <View style={[styles.headerContainer, { zIndex: 100 }]}>
+        <View style={styles.headerLeftGroup}>
+          <TouchableOpacity 
+            onPress={handleHeaderBackPress} 
+            style={[styles.backButton, { zIndex: 10, position: 'relative' }]}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Feather name="arrow-left" size={28} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.logoContainer}>
+              <Image
+                source={require('../../assets/images/logo3.png')} 
+                style={styles.logoImage}
+              />
+          </View>
         </View>
-        <View style={styles.profileContainer}>
-          <Image
-            source={{ uri: 'https://via.placeholder.com/40' }}
-            style={styles.profileImage}
-          />
-          <Ionicons name="notifications-outline" size={24} color="black" style={{ marginLeft: 10 }} />
+        
+        <View style={styles.iconsContainer}>
+            <TouchableOpacity onPress={handleLogout} style={{ marginRight: 10 }}>
+              <Feather name="log-out" size={24} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {}}> 
+              <Image
+                source={{ uri: auth.currentUser?.photoURL || 'https://randomuser.me/api/portraits/men/1.jpg' }}
+                style={styles.profileImage}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Alert.alert("Notificações", "Nenhuma nova notificação.")} style={{ marginLeft: 10 }}>
+              <Feather name="bell" size={24} color="#fff" />
+            </TouchableOpacity>
         </View>
       </View>
 
-      {/* Formulário */}
-      <View style={styles.formContainer}>
-        <CustomInput label="CPF" placeholder="000.000.000-00" value={cpf} setValue={setCpf} editable={false} />
-        <CustomInput label="Nome" placeholder="João Silva" value={nome} setValue={setNome} />
-        <CustomInput label="Endereço de e-mail" placeholder="joao@mail.com" value={email} setValue={setEmail} editable={false} />
-        <CustomInput label="Telefone" placeholder="(00) 0 0000-0000" value={telefone} setValue={setTelefone} />
+      <ScrollView 
+        style={styles.formScrollView}
+        contentContainerStyle={styles.formScrollViewContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.formContainer}>
+          <Text style={styles.formTitle}>Editar Perfil</Text>
+          <CustomInput label="CPF" placeholder="000.000.000-00" value={cpf} setValue={setCpf} editable={false} iconName="id-card-outline"/>
+          <CustomInput label="Nome Completo" placeholder="Seu nome completo" value={nome} setValue={setNome} iconName="person-outline"/>
+          <CustomInput label="Endereço de e-mail" placeholder="seuemail@example.com" value={email} setValue={setEmail} editable={false} iconName="mail-outline"/>
+          <CustomInput label="Telefone" placeholder="(00) 00000-0000" value={telefone} setValue={setTelefone} keyboardType="phone-pad" iconName="call-outline"/>
 
-        {/* Botão Salvar */}
-        <TouchableOpacity style={styles.saveButton} onPress={handleSaveProfile} disabled={loading}>
-          <Text style={styles.saveButtonText}>{loading ? 'Salvando...' : 'Salvar'}</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSaveProfile} disabled={isSaving}>
+            {isSaving ? <ActivityIndicator color="#fff"/> : <Text style={styles.saveButtonText}>Salvar Alterações</Text>}
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
@@ -122,105 +198,30 @@ type CustomInputProps = {
   value: string;
   setValue: (text: string) => void;
   editable?: boolean;
+  secureTextEntry?: boolean;
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
+  iconName?: keyof typeof Ionicons.glyphMap;
+  maxLength?: number; 
 };
 
-function CustomInput({ label, placeholder, value, setValue, editable = true }: CustomInputProps) {
+function CustomInput({ label, placeholder, value, setValue, editable = true, secureTextEntry = false, keyboardType = 'default', iconName, maxLength }: CustomInputProps) {
   return (
-    <>
+    <View style={styles.inputOuterContainer}>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, !editable && styles.inputDisabled]}>
+        {iconName && <Ionicons name={iconName} size={20} color={editable ? "#666" : "#aaa"} style={styles.inputIcon} />}
         <TextInput
           style={styles.input}
           placeholder={placeholder}
+          placeholderTextColor="#999"
           value={value}
           onChangeText={setValue}
           editable={editable}
+          secureTextEntry={secureTextEntry}
+          keyboardType={keyboardType}
+          maxLength={maxLength}
         />
-        {editable && (
-          <Ionicons name="pencil-outline" size={20} color="gray" />
-        )}
       </View>
-    </>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#62B5F6',
-    paddingHorizontal: 20,
-    paddingTop: 50,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  logoContainer: {
-    backgroundColor: '#F97F51',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-  },
-  logoText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  formContainer: {
-    marginTop: 30,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-  },
-  label: {
-    marginTop: 15,
-    marginBottom: 5,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    backgroundColor: '#f5f5f5',
-  },
-  passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    backgroundColor: '#f5f5f5',
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    color: '#333',
-  },
-  saveButton: {
-    marginTop: 30,
-    backgroundColor: '#F97F51',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  saveButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});

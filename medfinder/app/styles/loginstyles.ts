@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const loginStyles = StyleSheet.create({
   container: {
@@ -51,7 +51,7 @@ export const loginStyles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#F28B50',
+    backgroundColor: '#004766',
     paddingVertical: 14,
     paddingHorizontal: 36,
     borderRadius: 10,
@@ -68,11 +68,11 @@ export const loginStyles = StyleSheet.create({
   forgotPasswordText: {
     marginTop: 15,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
     textDecorationLine: 'underline',
   },
   registerText: {
-    color: '#fff',
+    color: '#000',
     marginTop: 20,
     textDecorationLine: 'underline',
   },

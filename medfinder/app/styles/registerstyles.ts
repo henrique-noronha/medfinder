@@ -1,7 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native'; // Adicionado Dimensions
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Para tamanhos responsivos se precisar
 
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const registerStyles = StyleSheet.create({
   container: {
@@ -10,23 +11,21 @@ export const registerStyles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
     position: 'relative',
-    backgroundColor: 'transparent', 
+    backgroundColor: 'transparent',
   },
   backgroundGradient: {
     ...StyleSheet.absoluteFillObject,
     zIndex: -1,
   },
-  logo: {
-    backgroundColor: '#F28B50',
-    paddingVertical: 32,
-    paddingHorizontal: 38,
-    borderRadius: 16,
-    marginBottom: 20,
+  logoContainer: { 
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20, 
   },
-  logoText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '500',
+  logoImage: { 
+    width: 360,
+    height: 218,
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 22,
@@ -51,8 +50,12 @@ export const registerStyles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 16,
   },
+  inputText: {
+    fontSize: 16,
+    color: '#333',
+  },
   button: {
-    backgroundColor: '#F28B50',
+    backgroundColor: '#004766',
     paddingVertical: 14,
     paddingHorizontal: 36,
     borderRadius: 10,
@@ -65,7 +68,7 @@ export const registerStyles = StyleSheet.create({
     fontSize: 16,
   },
   registerText: {
-    color: '#fff',
+    color: '#000',
     marginTop: 16,
     textDecorationLine: 'underline',
   },
@@ -106,20 +109,14 @@ export const registerStyles = StyleSheet.create({
     textAlign: 'center',
   },
   addressInput: {
-    padding: 10,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 12,
+    paddingVertical: 12,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   specialtiesInput: {
-    padding: 10,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 12,
+    paddingVertical: 12,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   listItem: {
     flexDirection: 'row',
