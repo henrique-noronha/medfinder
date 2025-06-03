@@ -6,7 +6,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
   },
-
   decorativeBackground: {
     position: 'absolute',
     top: 0,
@@ -18,7 +17,6 @@ export default StyleSheet.create({
     borderBottomRightRadius: 250,
     zIndex: 0,
   },
-
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -29,21 +27,17 @@ export default StyleSheet.create({
     minHeight: 100,
     zIndex: 1,
   },
-
   logoContainer: {},
-
   logoImage: {
     width: 240,
     height: 100,
     resizeMode: 'contain',
     marginLeft: -75,
   },
-
   iconsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   profileImage: {
     width: 40,
     height: 40,
@@ -52,7 +46,29 @@ export default StyleSheet.create({
     borderColor: '#fff',
     marginLeft: 12,
   },
-
+  notificationBellContainer: {
+    position: 'relative',
+    padding: 5,
+    marginLeft: 10,
+  },
+  badgeContainer: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    backgroundColor: 'red',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 20,
+    zIndex: 2,
+  },
+  badgeText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
   greetingText: {
     color: '#fff',
     fontSize: 18,
@@ -62,14 +78,12 @@ export default StyleSheet.create({
     marginBottom: 15,
     zIndex: 1,
   },
-
   searchContainer: {
     marginTop: 15,
     paddingHorizontal: 20,
     marginBottom: 30,
     zIndex: 1,
   },
-
   searchLabel: {
     color: 'rgba(255, 255, 255, 0.9)',
     fontSize: 16,
@@ -77,7 +91,6 @@ export default StyleSheet.create({
     marginBottom: 8,
     marginLeft: 5,
   },
-
   searchBar: {
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -91,13 +104,11 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 2,
   },
-
   searchInput: {
     flex: 1,
     fontSize: 16,
     color: '#333',
   },
-
   searchButton: {
     marginLeft: 10,
     backgroundColor: '#fff',
@@ -107,17 +118,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   cardsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     marginTop: 40,
     zIndex: 1,
     paddingBottom: 20,
   },
-
   card: {
     backgroundColor: '#F2F2F2',
     width: '47%',
@@ -134,11 +143,9 @@ export default StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-
   cardIcon: {
     marginBottom: 10,
   },
-
   cardText: {
     fontSize: 15,
     fontWeight: '600',

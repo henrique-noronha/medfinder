@@ -1,40 +1,38 @@
 // app/pending-profissional.tsx
-import React, { useEffect, useState, useCallback } from 'react'; // Adicionado useCallback
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert } from 'react-native';
-import { getAuth, User as FirebaseUser } from 'firebase/auth'; // User as FirebaseUser
-import { collection, query, where, getDocs, updateDoc, doc, Timestamp } from 'firebase/firestore'; // Timestamp
+import { getAuth, User as FirebaseUser } from 'firebase/auth';
+import { collection, query, where, getDocs, updateDoc, doc, Timestamp, addDoc, serverTimestamp } from 'firebase/firestore'; // ADICIONADO addDoc e serverTimestamp
 import { db } from '../firebaseConfig';
-import styles, { gradientColors } from './styles/pendingStyles'; // Seus estilos
+import styles, { gradientColors } from './styles/pendingStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-import { useRouter, useFocusEffect } from 'expo-router'; // Adicionado useFocusEffect
+import { useRouter, useFocusEffect } from 'expo-router';
 
 interface Appointment {
   id: string;
-  userId: string;
+  userId: string; // UID do paciente
   userEmail: string;
-  userName?: string; // Nome do paciente
+  userName?: string;
   professionalUID: string;
   professionalName: string;
   date: string;
   hour: string;
   status: 'pendente' | 'confirmada' | 'cancelada' | 'realizada';
-  createdAt: Timestamp; // Usar Timestamp
+  createdAt: Timestamp;
 }
 
 export default function PendingProfissionalScreen() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
-  const professionalUser = auth.currentUser; // Usuário profissional logado
+  const professionalUser = auth.currentUser;
   const router = useRouter();
 
   const fetchAppointments = useCallback(async () => {
     if (!professionalUser) {
       setAppointments([]);
       setLoading(false);
-      // Alert.alert("Atenção", "Você precisa estar logado para ver os agendamentos pendentes.");
-      // router.replace('/auth/login'); // Opcional: redirecionar se não estiver logado
       return;
     }
     setLoading(true);
@@ -42,7 +40,7 @@ export default function PendingProfissionalScreen() {
       const appointmentsRef = collection(db, 'appointments');
       const q = query(
         appointmentsRef,
-        where('professionalUID', '==', professionalUser.uid), // Query pelo UID do profissional logado
+        where('professionalUID', '==', professionalUser.uid),
         where('status', '==', 'pendente')
       );
       const querySnapshot = await getDocs(q);
@@ -51,7 +49,6 @@ export default function PendingProfissionalScreen() {
         ...(docData.data() as Omit<Appointment, 'id'>),
       }));
 
-      // Ordenar por data e hora mais próximos primeiro
       list.sort((a, b) => {
         const dateA = new Date(`${a.date}T${a.hour}`);
         const dateB = new Date(`${b.date}T${b.hour}`);
@@ -66,25 +63,46 @@ export default function PendingProfissionalScreen() {
     setLoading(false);
   }, [professionalUser]);
 
-  // useFocusEffect para recarregar os dados quando a tela recebe foco
   useFocusEffect(
     useCallback(() => {
       fetchAppointments();
     }, [fetchAppointments])
   );
 
-  const updateAppointmentStatus = async (id: string, newStatus: Appointment['status']) => {
+  // Modificada para aceitar o objeto 'appointment' completo
+  const updateAppointmentStatus = async (appointment: Appointment, newStatus: Appointment['status']) => {
+    if (!professionalUser) {
+        Alert.alert("Erro", "Usuário profissional não autenticado.");
+        return;
+    }
     try {
-      const appointmentRef = doc(db, 'appointments', id);
+      const appointmentRef = doc(db, 'appointments', appointment.id);
       await updateDoc(appointmentRef, { status: newStatus });
 
-      setAppointments(prev => prev.filter(app => app.id !== id)); // Remove da lista de pendentes
+      // Criar notificação para o usuário (paciente)
+      const notificationTitle = newStatus === 'confirmada' ? 'Consulta Confirmada' : 'Consulta Recusada';
+      const notificationMessage = newStatus === 'confirmada'
+        ? `Sua consulta com Dr(a). ${appointment.professionalName} para ${new Date(appointment.date + 'T00:00:00Z').toLocaleDateString('pt-BR', { timeZone: 'UTC' })} às ${appointment.hour} foi confirmada.`
+        : `Sua consulta com Dr(a). ${appointment.professionalName} para ${new Date(appointment.date + 'T00:00:00Z').toLocaleDateString('pt-BR', { timeZone: 'UTC' })} às ${appointment.hour} foi recusada. Por favor, entre em contato ou tente agendar novamente.`;
 
-      Alert.alert('Sucesso', `Consulta ${newStatus === 'confirmada' ? 'confirmada' : 'recusada'} com sucesso.`);
-      // Poderia adicionar lógica para notificar o usuário aqui
+      await addDoc(collection(db, 'userNotifications'), {
+        userId: appointment.userId, // UID do paciente
+        title: notificationTitle,
+        message: notificationMessage,
+        createdAt: serverTimestamp(),
+        read: false,
+        type: 'appointment_status',
+        relatedAppointmentId: appointment.id,
+        professionalName: appointment.professionalName, // Nome do profissional que atualizou
+        professionalUid: professionalUser.uid, // UID do profissional que atualizou
+      });
+
+      setAppointments(prev => prev.filter(app => app.id !== appointment.id));
+      Alert.alert('Sucesso', `Consulta ${newStatus === 'confirmada' ? 'confirmada' : 'recusada'} com sucesso. O paciente será notificado.`);
+
     } catch (error) {
-      console.error('Erro ao atualizar consulta:', error);
-      Alert.alert('Erro', 'Não foi possível atualizar o status da consulta.');
+      console.error('Erro ao atualizar consulta e notificar:', error);
+      Alert.alert('Erro', 'Não foi possível atualizar o status da consulta ou notificar o paciente.');
     }
   };
 
@@ -139,14 +157,12 @@ export default function PendingProfissionalScreen() {
               <Text style={styles.patientName}>Paciente: {app.userName || app.userEmail}</Text>
               <Text style={styles.info}>Data: {new Date(app.date + 'T00:00:00Z').toLocaleDateString('pt-BR', { timeZone: 'UTC' })} às {app.hour}</Text>
               <Text style={styles.status}>Status: {app.status}</Text>
-              {/* Adicionar mais detalhes se necessário, como email do paciente */}
-              {/* <Text style={styles.info}>Contato: {app.userEmail}</Text> */}
 
               {app.status === 'pendente' && (
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     style={[styles.button, styles.confirmButton]}
-                    onPress={() => updateAppointmentStatus(app.id, 'confirmada')}
+                    onPress={() => updateAppointmentStatus(app, 'confirmada')} // Passando o objeto 'app' completo
                   >
                     <Feather name="check-circle" size={16} color="#fff" />
                     <Text style={styles.buttonText}>Confirmar</Text>
@@ -154,7 +170,7 @@ export default function PendingProfissionalScreen() {
 
                   <TouchableOpacity
                     style={[styles.button, styles.cancelButton]}
-                    onPress={() => updateAppointmentStatus(app.id, 'cancelada')}
+                    onPress={() => updateAppointmentStatus(app, 'cancelada')} // Passando o objeto 'app' completo
                   >
                     <Feather name="x-circle" size={16} color="#fff" />
                     <Text style={styles.buttonText}>Recusar</Text>

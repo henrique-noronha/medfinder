@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Feather, FontAwesome5 } from '@expo/vector-icons';
+import { Feather, FontAwesome5 } from '@expo/vector-icons'; // FontAwesome5 já está importado
 import { useRouter } from 'expo-router';
 import { getAuth, signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'; // Adicionado collection, query, where, getDocs
 import { db } from '../firebaseConfig';
 import styles from './styles/homestyles';
 
@@ -26,17 +26,22 @@ export default function HomeProfissionalScreen() {
     const fetchUserData = async () => {
       const user = auth.currentUser;
       if (user) {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          setFullName(data.fullName || '');
+        // Tenta buscar primeiro na coleção 'users'
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists() && userDocSnap.data().fullName) {
+          setFullName(userDocSnap.data().fullName);
         } else {
-          // Se não encontrar no 'users', pode ser que o nome esteja no 'healthcareProfessionals'
-          // Esta é uma suposição, ajuste se o nome do profissional vier de outra fonte
-          const professionalDocRef = doc(db, 'healthcareProfessionals', user.uid); // Assumindo que o ID aqui também é o authUid
-          const professionalDocSnap = await getDoc(professionalDocRef);
-          if (professionalDocSnap.exists() && professionalDocSnap.data().fullName) {
-            setFullName(professionalDocSnap.data().fullName);
+          // Se não encontrar ou não tiver fullName, tenta buscar na coleção 'healthcareProfessionals' pelo authUid
+          const professionalsQuery = query(collection(db, 'healthcareProfessionals'), where('authUid', '==', user.uid));
+          const professionalSnapshot = await getDocs(professionalsQuery);
+
+          if (!professionalSnapshot.empty) {
+            const professionalData = professionalSnapshot.docs[0].data(); // Pega o primeiro documento correspondente
+            setFullName(professionalData.fullName || 'Profissional');
+          } else {
+            setFullName(user.displayName || user.email?.split('@')[0] || 'Profissional');
           }
         }
       }
@@ -60,7 +65,7 @@ export default function HomeProfissionalScreen() {
         <View style={styles.headerContainer}>
           <View style={styles.logoContainer}>
             <Image
-              source={require('../assets/images/logo3.png')}
+              source={require('../assets/images/logo3.png')} // Confirme o caminho da imagem
               style={styles.logoImage}
             />
           </View>
@@ -68,7 +73,8 @@ export default function HomeProfissionalScreen() {
             <TouchableOpacity onPress={handleLogout} style={{ marginRight: 10 }}>
               <Feather name="log-out" size={24} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/profile/edit')}>
+            {/* Opcional: Manter o ícone de perfil no header se fizer sentido, ou remover/alterar */}
+            <TouchableOpacity onPress={() => router.push('/profile/edit')}> 
               <Image
                 source={{ uri: auth.currentUser?.photoURL || 'https://randomuser.me/api/portraits/men/1.jpg' }}
                 style={styles.profileImage}
@@ -97,9 +103,10 @@ export default function HomeProfissionalScreen() {
             <Feather name="calendar" size={28} color="#444" style={styles.cardIcon} />
             <Text style={styles.cardText}>Definir Horários</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.card} onPress={() => router.push('/profile/edit')}>
-            <Feather name="user" size={28} color="#444" style={styles.cardIcon} />
-            <Text style={styles.cardText}>Meu Perfil</Text>
+          {/* CARD ALTERADO ABAIXO */}
+          <TouchableOpacity style={styles.card} onPress={() => router.push('/upload-results')}>
+            <Feather name="upload" size={28} color="#444" style={styles.cardIcon} />
+            <Text style={styles.cardText}>Enviar Resultados</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

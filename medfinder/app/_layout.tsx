@@ -49,6 +49,8 @@ export default function RootLayout() {
         <Stack.Screen name="setAvailability" options={{ headerShown: false }} /> {}
         <Stack.Screen name="auth/admin-dashboard" options={{ headerShown: false }} /> {}
         <Stack.Screen name="admin/register-professional" options={{ headerShown: false }} /> {}
+        <Stack.Screen name="upload-results" options={{ headerShown: false }} /> {}
+        <Stack.Screen name="notifications" options={{ headerShown: false }} /> {}
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
