@@ -1,4 +1,3 @@
-// app/styles/pendingStyles.ts
 import { StyleSheet } from 'react-native';
 
 export const gradientColors: [string, string] = ['#004766', '#bfecff'];
@@ -46,6 +45,26 @@ export default StyleSheet.create({
     shadowRadius: 2.22,
     elevation: 3,
   },
+
+  // ===================================
+  // --- ESTILOS ADICIONADOS AQUI ---
+  // ===================================
+  cancelledCard: {
+    backgroundColor: '#EAEAEA', // Fundo cinza claro para itens inativos
+    opacity: 0.8,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    paddingTop: 10,
+  },
+  // ===================================
+  // --- FIM DA ADIÇÃO ---
+  // ===================================
+
   patientName: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -62,9 +81,10 @@ export default StyleSheet.create({
     marginTop: 8,
     fontWeight: 'bold',
     fontSize: 15,
-    color: '#FF8C00',
+    color: '#FF8C00', // Laranja para 'pendente'
     textTransform: 'capitalize',
     marginBottom: 10,
+    marginLeft: 5, // Espaçamento entre o ícone e o texto no histórico
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -82,10 +102,10 @@ export default StyleSheet.create({
     marginHorizontal: 5,
   },
   confirmButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#4CAF50', // Verde
   },
   cancelButton: {
-    backgroundColor: '#F44336',
+    backgroundColor: '#F44336', // Vermelho
   },
   buttonText: {
     color: '#fff',

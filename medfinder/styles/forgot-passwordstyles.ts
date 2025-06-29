@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const forgotPasswordStyles = StyleSheet.create({
   container: {
@@ -15,17 +15,15 @@ export const forgotPasswordStyles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     zIndex: -1,
   },
-  logo: {
-    backgroundColor: '#F28B50',
-    paddingVertical: 32,
-    paddingHorizontal: 38,
-    borderRadius: 16,
-    marginBottom: 20,
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20, 
   },
-  logoText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '500',
+  logoImage: {
+    width: 360, 
+    height: 218, 
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 22,
@@ -33,6 +31,7 @@ export const forgotPasswordStyles = StyleSheet.create({
     color: '#fff',
     fontWeight: '300',
     marginBottom: 20,
+    paddingHorizontal: 10,
   },
   strong: {
     fontWeight: 'bold',
@@ -49,9 +48,10 @@ export const forgotPasswordStyles = StyleSheet.create({
     padding: 12,
     marginBottom: 12,
     fontSize: 16,
+    color: '#333',
   },
   button: {
-    backgroundColor: '#F28B50',
+    backgroundColor: '#004766',
     paddingVertical: 14,
     paddingHorizontal: 36,
     borderRadius: 10,
@@ -62,9 +62,10 @@ export const forgotPasswordStyles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   registerText: {
-    color: '#fff',
+    color: '#000',
     marginTop: 16,
     textDecorationLine: 'underline',
   },
