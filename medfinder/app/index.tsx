@@ -1,19 +1,18 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { useRouter } from 'expo-router';
-import { indexStyles as styles } from './styles/indexstyles'; // Verifique se este caminho está correto
+import { useRouter, Href } from 'expo-router'; 
+import { indexStyles as styles } from '@/styles/indexstyles'; 
 import { LinearGradient } from 'expo-linear-gradient';
-
-// Se você estiver usando TypeScript e exportou gradientColors de indexStyles.ts,
-// você pode importá-lo assim, caso precise aqui:
-// import { gradientColors } from './styles/indexstyles';
+import Constants from 'expo-constants'; 
 
 export default function WelcomeScreen() {
   const router = useRouter();
 
+  const appVersion = Constants.expoConfig?.version;
+
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#004766', '#bfecff']} 
+        colors={['#004766', '#bfecff']}
         style={styles.backgroundGradient}
       />
 
@@ -25,19 +24,21 @@ export default function WelcomeScreen() {
 
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/images/logo3.png')}
+          source={require('../assets/images/logo3.png')} // require com caminho relativo ainda é o padrão para imagens
           style={styles.logoImage}
         />
       </View>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.replace('/auth/login' as const)} 
+      // Usando o caminho canônico da rota de grupo
+        onPress={() => router.replace('/(auth)/login' as Href)}
       >
         <Text style={styles.buttonText}>Entrar no aplicativo</Text>
       </TouchableOpacity>
 
-      <Text style={styles.version}>v 1.2.0</Text>
+      {/*Exibindo a versão dinâmica */}
+      {appVersion && <Text style={styles.version}>v {appVersion}</Text>}
     </View>
   );
 }

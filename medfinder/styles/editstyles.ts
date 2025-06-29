@@ -1,3 +1,4 @@
+// styles/editstyles.ts
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -5,39 +6,34 @@ const { width: screenWidth } = Dimensions.get('window');
 export const gradientColors = ['#004766', '#bfecff'] as const;
 
 export default StyleSheet.create({
-  
   container: {
     flex: 1,
   },
-  
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between', 
+    justifyContent: 'space-between',
     paddingTop: 20,
-    paddingHorizontal: 15, 
+    paddingHorizontal: 15,
     width: '100%',
-    minHeight: 60, 
-    
+    minHeight: 60,
   },
-  headerLeftGroup: { 
+  headerLeftGroup: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   backButton: {
-    paddingRight: 10, 
-    paddingVertical: 5, 
+    paddingRight: 10,
+    paddingVertical: 5,
   },
-  logoContainer: {
-   
-  },
+  logoContainer: {},
   logoImage: {
     width: 240,
     height: 100,
     resizeMode: 'contain',
-    marginLeft: -75, // Exatamente como na sua home
+    marginLeft: -75,
   },
-  iconsContainer: { 
+  iconsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -47,9 +43,8 @@ export default StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1.5,
     borderColor: '#fff',
-    marginLeft: 12, 
+    marginLeft: 12,
   },
-  
   centeredMessage: {
     flex: 1,
     justifyContent: 'center',
@@ -59,10 +54,9 @@ export default StyleSheet.create({
   centeredMessageText: {
     marginTop: 10,
     fontSize: 16,
-    color: '#FFFFFF', 
+    color: '#FFFFFF',
     textAlign: 'center',
   },
- 
   formScrollView: {
     flex: 1,
   },
@@ -70,7 +64,7 @@ export default StyleSheet.create({
     paddingBottom: 30,
     flexGrow: 1,
     justifyContent: 'flex-start',
-    paddingHorizontal: 20, 
+    paddingHorizontal: 20,
   },
   formContainer: {
     marginTop: 20,
@@ -101,19 +95,19 @@ export default StyleSheet.create({
     marginBottom: 8,
     fontSize: 15,
     fontWeight: '600',
-    color: '#4A5568', 
+    color: '#000000', 
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF', 
+    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#CBD5E0', 
+    borderColor: '#CBD5E0',
     paddingHorizontal: 12,
   },
   inputDisabled: {
-    backgroundColor: '#E9EEF2', 
+    backgroundColor: '#E9EEF2',
   },
   inputIcon: {
     marginRight: 10,
@@ -122,11 +116,11 @@ export default StyleSheet.create({
     flex: 1,
     height: 50,
     fontSize: 16,
-    color: '#2D3748', 
+    color: '#2D3748',
   },
   saveButton: {
     marginTop: 30,
-    backgroundColor: '#004766', 
+    backgroundColor: '#004766',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

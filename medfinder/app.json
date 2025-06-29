@@ -1,21 +1,24 @@
 {
   "expo": {
-    "name": "medfinder",
+    "name": "MedFinder",
     "slug": "medfinder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "medfinder", 
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.seunome.medfinder" 
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.seunome.medfinder", 
+      "versionCode": 1 
     },
     "web": {
       "bundler": "metro",
@@ -35,7 +38,7 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true 
     }
   }
 }

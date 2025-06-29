@@ -1,56 +1,60 @@
 import { StyleSheet } from 'react-native';
 
-export const gradientColors: [string, string] = ['#64C1FF', '#3C7499'];
+export const gradientColors: [string, string] = ['#004766', '#bfecff'];
 
 export const indexStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    padding: 24,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
     position: 'relative',
-    backgroundColor: 'transparent', 
+    backgroundColor: 'transparent',
   },
   backgroundGradient: {
     ...StyleSheet.absoluteFillObject,
     zIndex: -1,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     textAlign: 'center',
     color: '#fff',
     fontWeight: '300',
+    paddingHorizontal: 10,
+    marginBottom: 5,
   },
   strong: {
     fontWeight: 'bold',
     color: '#fff',
   },
-  logo: {
-    backgroundColor: '#F28B50',
-    paddingVertical: 32,
-    paddingHorizontal: 38,
-    borderRadius: 16,
-    marginTop: 20,
+  logoContainer: {
+    marginTop: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
   },
-  logoText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '500',
+  logoImage: {
+    width: 360,
+    height: 218,
+    resizeMode: 'contain',
   },
   button: {
-    backgroundColor: '#F28B50',
-    paddingVertical: 15,
+    backgroundColor: '#004766',
+    paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
-    marginTop: 30,
+    marginTop: 15,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: '500',
+    textAlign: 'center',
   },
   version: {
     fontSize: 12,
-    color: '#fff',
+    color: '#000',
     position: 'absolute',
     bottom: 10,
   },

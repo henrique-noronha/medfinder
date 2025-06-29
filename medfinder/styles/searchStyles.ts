@@ -23,7 +23,6 @@ const searchStyles = StyleSheet.create({
   },
   backButton: {
     padding: 5,
-    marginRight: 10,
   },
   headerTitle: {
     flex: 1,
@@ -31,6 +30,7 @@ const searchStyles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
+    marginRight: 34, // Compensa o espaço do botão de filtro
   },
   searchContainer: {
     marginBottom: 20,
@@ -48,24 +48,19 @@ const searchStyles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     height: 50,
-    paddingHorizontal: 15,
+    paddingHorizontal: 5, // Ajustado
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
     color: '#333',
+    paddingLeft: 15,
   },
   searchButton: {
-    marginLeft: 10,
-    backgroundColor: '#fff',
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 8,
   },
   filterButton: {
-    marginLeft: 10,
+    marginLeft: 5,
     backgroundColor: '#4682B4',
     width: 38,
     height: 38,
@@ -93,7 +88,7 @@ const searchStyles = StyleSheet.create({
   avatarCircle: {
     width: 50,
     height: 50,
-    borderRadius: 15,
+    borderRadius: 25, // Círculo perfeito
     backgroundColor: '#A9A9A9',
     alignItems: 'center',
     justifyContent: 'center',
@@ -134,6 +129,22 @@ const searchStyles = StyleSheet.create({
     color: '#666',
     marginTop: 2,
   },
+
+  // --- ESTILOS ADICIONADOS AQUI ---
+  loadingView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    color: '#fff',
+    marginTop: 15,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  // --- FIM DA ADIÇÃO ---
+
   noResultsText: {
     marginTop: 30,
     textAlign: 'center',
@@ -144,20 +155,17 @@ const searchStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)', 
+    backgroundColor: 'rgba(0,0,0,0.6)',
     padding: 20,
   },
   filterModalContent: {
-    backgroundColor: '#333740', 
+    backgroundColor: '#333740',
     padding: 25,
     borderRadius: 10,
     width: '90%',
     alignItems: 'stretch',
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -198,10 +206,6 @@ const searchStyles = StyleSheet.create({
     color: '#FF8C00',
     fontSize: 15,
     textAlign: 'center',
-  },
-  inputText: {
-    fontSize: 16,
-    color: '#333',
   },
 });
 
