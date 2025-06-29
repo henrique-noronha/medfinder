@@ -2,12 +2,13 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-export const gradientColors: [string, string] = ['#004766', '#bfecff'];
+export const gradientColors = ['#004766', '#bfecff'] as const;
 
 export const registerStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'space-around',
+    // === ALTERAÇÃO AQUI: Use flexGrow em vez de flex ===
+    flexGrow: 1, // Permite que o conteúdo do ScrollView cresça e role
+    justifyContent: 'space-around', // Mantenha, se desejar o espaçamento
     alignItems: 'center',
     padding: 24,
     position: 'relative',
@@ -76,10 +77,6 @@ export const registerStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
-  // ===================================
-  // --- ESTILOS ADICIONADOS AQUI ---
-  // ===================================
   addButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderStyle: 'dashed',
@@ -88,7 +85,7 @@ export const registerStyles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center', // Corrigido
     marginTop: 5,
     marginBottom: 15,
     width: '100%',
@@ -98,10 +95,6 @@ export const registerStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  // ===================================
-  // --- FIM DA ADIÇÃO ---
-  // ===================================
-
   registerText: {
     color: '#000',
     marginTop: 16,
@@ -122,7 +115,7 @@ export const registerStyles = StyleSheet.create({
     color: '#333',
   },
   pickerItem: {
-
+    // Estilos para itens do Picker (podem variar por plataforma)
   },
   label: {
     fontSize: 16,
@@ -219,5 +212,5 @@ export const registerStyles = StyleSheet.create({
   },
   insuranceModalScrollView: {
     maxHeight: screenHeight * 0.5,
-  }
+  },
 });

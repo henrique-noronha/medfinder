@@ -1,9 +1,29 @@
 # Projeto de Sistemas 2025.1 - Universidade Federal do Tocantins
-Bacharelado em Ciência da Computação,  
+Bacharelado em Ciência da Computação,  
 
-Professor: Edeilson Milhomem da Silva  
+Professor: Edeilson Milhomem da Silva  
 
-Grupo: Henrique Noronha, Vicente, Breno Borges, João Victor Mota e Igor.
+Grupo: [Henrique Noronha](https://github.com/henrique-noronha), [Vicente](https://github.com/Vicentolah17) e [João Victor Mota](https://github.com/JaumMota).
+
+## Sumário
+
+- [MedFinder](#medfinder)
+  - [Descrição](#descrição)
+- [MVP - MedFinder](#mvp---medfinder)
+  - [Funcionalidades Essenciais](#funcionalidades-essenciais)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Planejamento de Iterações](#planejamento-de-iterações)
+  - [Iteração 1: Cadastro, login e edição de perfil](#iteração-1-cadastro-login-e-edição-de-perfil)
+  - [Iteração 2: Cadastro e pesquisa de profissionais](#iteração-2-cadastro-e-pesquisa-de-profissionais)
+  - [Iteração 3: Agendamento e Visual](#iteração-3-agendamento-e-visual)
+  - [Iteração 4: Gestão de Disponibilidade, Resultados de Exames e Otimizações](#iteração-4-gestão-de-disponibilidade-resultados-de-exames-e-otimizações)
+- [Como Executar o Projeto](#como-executar-o-projeto)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Configuração](#configuração)
+  - [Executando o Projeto](#executando-o-projeto)
+- [Links Úteis](#links-úteis)
+
+---
 
 ## MedFinder  
 ![Logo MedFinder](./medfinder/assets/images/logo2.png)
@@ -16,148 +36,67 @@ Para profissionais e estabelecimentos de saúde, o **MedFinder** oferece um espa
 ---
 
 ## MVP - MedFinder
-O MVP (Minimum Viable Product) do MedFinder será uma versão funcional da plataforma focada nas principais funcionalidades essenciais para validar a proposta de valor e testar a aceitação do mercado.
+O MVP (Minimum Viable Product) do MedFinder é uma versão funcional da plataforma focada nas principais funcionalidades essenciais para validar a proposta de valor e testar a aceitação do mercado.
 
-### Funcionalidades Essenciais:
-- Como usuário:
-    - Cadastro de Usuários
-    - Busca e Filtros
-    - Agendamento online
-    - Histórico de consultas
-- Como Administrador:
-    - Profissionais recebem notificação dos novos agendamentos.
-    - Gerenciar agenda e disponibilidade.
-    - Modelo de Monetização
+### Funcionalidades Essenciais
+- **Como Paciente (Usuário):**
+  - Cadastro e Login de Pacientes
+  - Busca de Profissionais/Serviços (com filtros: especialidade, localização, convênio, etc.)
+  - Visualização de Perfis de Profissionais/Serviços
+  - Agendamento Online Simplificado
+  - Histórico de Consultas Agendadas
+  - Visualização de Exames.
+- **Como Profissional da Saúde/Estabelecimento:**
+  - Cadastro e Login de Profissionais/Estabelecimentos
+  - Gerenciamento de Perfil (informações, serviços oferecidos)
+  - Visualização de Solicitações de Agendamento (Receber notificação)
+  - Confirmação/Recusa de Agendamentos
+  - Gerenciamento Básico de Agenda/Disponibilidade
+- **Plataforma (Geral):**
+  - Interface administrativa básica para gerenciamento de cadastros.
 
 ---
 
 ## Tecnologias Utilizadas
 
+**React Native** com **Expo** e **TypeScript** para o frontend mobile, e **Firebase** (Authentication, Firestore, Storage) para o backend e serviços na nuvem.
+
 ---
 
-## User Stories e Protótipos de Tela
-
-
- ### Página de Boas-vindas MedFinder:
-
-
-![Index](./images/index.png)  
-
- ### Cadastro e Login:  
- Como usuário quero me cadastrar e fazer login na plataforma para acessar os serviços de saúde disponíveis. Para realizar o login é necessário ter feito o cadastro e preencher o email e senha, caso contrário, clicar em "Não possui cadastro?"  
-
-
- ![Login](./images/login.png) ![Cadastro](./images/cadastro.png)  
-
-
- ### Tela Inicial do Usuário  
-
- Como usuário, após fazer o login, consigo visualizar o campo de pesquisa, além de cards como: histórico, pendências, resultados e ajuda.  
-
-
- ![Home](./images/home.png)
- 
-
-
-**Critérios de Aceitação**  
-
--  O usuário deve visualizar um campo de busca para pesquisar por especialidade médica.  
--  O campo de busca deve permitir a digitação de termos.  
--  O botão de pesquisa deve estar visível e acessível para iniciar a busca.  
--  O usuário deve ver quatro opções de navegação: **Histórico**, **Pendentes**, **Ajuda** e **Resultados**.  
--  Ao clicar em **Histórico**, o usuário é direcionado para uma tela com consultas passadas.  
--  Ao clicar em **Pendentes**, o usuário é direcionado para uma tela com consultas e exames ainda não realizados.  
--  Ao clicar em **Ajuda**, o usuário acessa informações sobre como usar o aplicativo.  
--  Ao clicar em **Resultados**, o usuário visualiza seus exames disponíveis na plataforma.  
--  O usuário deve ver seu nome ou um avatar no canto superior direito da tela.    
-
-**Cenários de Uso**
-
- Cenário 1: Busca por um profissional
-- O usuário digita "Cardiologista" no campo de busca.
-- Clica no botão de pesquisa.
-- O sistema exibe uma lista de profissionais disponíveis.
-
- Cenário 2: Visualização do histórico de consultas
-- O usuário clica no botão "Histórico".
-- O sistema exibe uma lista de consultas passadas.
-
- Cenário 3: Ver agendamentos pendentes
-- O usuário clica no botão "Pendentes".
-- O sistema exibe consultas e exames ainda não realizados.
-
- Cenário 4: Acesso a exames disponíveis
-- O usuário clica no botão "Resultados".
-- O sistema exibe os exames já disponibilizados pelos laboratórios.  
-
-### Histórico, pendentes e resultados.  
-Como usuário, quero verificar meu histórico, minhas pendencias e os resultados dos meus exames.  
-Para isso haverá cards na tela inicial, que ao clicar redirecionará para as respectivas páginas.  
-
-![Histórico](./images/historico.png) ![Pendentes](./images/pendentes.png) ![Resultados](./images/Exames.png)  
-
-**Critérios de Aceitação**    
--  Permitir visualizar o **histórico** de consultas já concluídas, com botão "detalhes" para expansão.
--  Exibir uma lista de **agendamentos pendentes** com data e horário, além dos botões "detalhes" e "cancelar".    
--  Mostrar **resultados** das consultas passadas, com botão "detalhes" para expansão.  
-
-### Pesquisa  
-Como **usuário**, quero pesquisar profissionais e serviços da saúde podendo visualizar uma lista de resultados, podendo clicar em um profissional ou serviço para abrir uma nova página e realizar o agendamento.  
-
-![Pesquisa](./images/pesquisa.png)    
-
-**Critérios de Aceitação**  
--  Permitir que o usuário pesquise por profissionais com filtros disponíveis.  
--  Exibir uma lista de profissionais com nome, local de atendimento e foto se houver.  
--  Incluir um botão ou link em cada profissional para acessar a página de agendamento.  
--  Redirecionar o usuário para a página do profissional selecionado ao clicar.  
-
-### Agendamentos  
-Como usuário, quero que, ao clicar em um profissional, seja aberta uma aba contendo um calendário e um botão 'Ver Detalhes', para que eu possa selecionar uma data disponível e visualizar informações detalhadas do agendamento.  
-
-![Agendamento](./images/agendamento.png)   
-
- **Critérios de Aceitação**
--  Ao clicar em um profissional na lista, o sistema deve abrir uma nova aba com um calendário.
--  O calendário deve exibir as datas disponíveis para agendamento.
--  Deve haver um botão "Ver Detalhes" para data e horário disponível.
--  Ao clicar em "Ver Detalhes", o sistema deve exibir informações adicionais (ex: horário da consulta, duração, observações, etc.).
--  A interface deve ser intuitiva e responsiva para facilitar a seleção da data e visualização dos detalhes.
-
 ## Planejamento de Iterações
-### Iteração 1: Cadastro, login e edição de perfil  
-Nesta primeira iteração, serão implementadas as funcionalidades essenciais para cadastro e login dos usuários.  
+### Iteração 1: Cadastro, login e edição de perfil  
+Nesta primeira iteração, serão implementadas as funcionalidades essenciais para cadastro e login dos usuários.  
 
-**Requisitos Funcionais**  
+**Requisitos Funcionais**
 
-| Nº | Requisito             | Tela | Funcionalidade | Autor    | Revisor  |
-|----|------------------------|------|----------------|----------|----------|
-| 1  | Tela de Boas-vindas    |      |                | Henrique | Vicente  |
-| 2  | Cadastro de Usuário    |      |                | Breno    | João     |
-| 3  | Login de Usuário       |      |                | Iago     | Henrique |
-| 4  | Tela Home              |      |                | Vicente  | Breno    |
-| 5  | Editar Perfil          |      |                | João     | Iago     |
- 
+| Nº | Requisito             | Tela              | Funcionalidade | Autor    | Revisor  |
+|----|-------------------------|-------------------|----------------|----------|----------|
+| 1  | Tela de Boas-vindas     | `` `index.tsx` ``       |                | Henrique | Vicente  |
+| 2  | Cadastro de Usuário     | `` `register.tsx` ``    |                | João     | Henrique |
+| 3  | Login de Usuário        | `` `login.tsx` ``       |                | João     | Vicente  |
+| 4  | Tela Home               | `` `home.tsx` ``        |                | Vicente  | João     |
+| 5  | Editar Perfil           | `` `edit.tsx` ``        |                | João     | Henrique |
+| 6  | Telas de Autenticação   |                   |                | Henrique | Vicente  |
 
-Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.   
+Objetivo: Como usuário quero poder me cadastrar na plataforma, fazer o login e editar meus dados.  
 
 
 
 ### Iteração 2: Cadastro e pesquisa de profissionais
 
-Nesta segunda iteração, serão desenvolvidas funcionalidades voltadas ao cadastro e busca de profissionais da saúde na plataforma.  
+Nesta segunda iteração, serão desenvolvidas funcionalidades voltadas ao cadastro e busca de profissionais da saúde na plataforma.  
 
 **Requisitos Funcionais**
 
-| Nº | Requisito                          | Tela              | Funcionalidade         | Autor    | Revisor  |
-|----|------------------------------------|-------------------|------------------------|----------|----------|
-| 6  | Cadastro de Profissionais          |                   | Registro de perfil     | João     | Vicente  |
-| 7  | Pesquisa de Profissionais          | search.tsx        | Barra de busca         | Henrique | João     |
-| 8  | Tela de Resultados de Exames       | result.tsx        | Listagem de resultados | Breno    | João     |
-| 9  | Tela de Ajuda                      | help.tsx          | Instruções de uso      | Vicente  | Breno    |
-| 10 | Tela de Pendência                  | pending.tsx       | Mensagem de pendência  | Vicente  | Henrique |
+| Nº | Requisito                      | Tela                          | Funcionalidade         | Autor    | Revisor  |
+|----|------------------------------------|-------------------------------|------------------------|----------|----------|
+| 6  | Cadastro de Profissionais        | `` `register-professional.tsx` `` | Registro de perfil     | João     | Vicente  |
+| 7  | Pesquisa de Profissionais        | `` `search.tsx` ``                 | Barra de busca         | Henrique | João     |
+| 8  | Tela de Resultados de Exames     | `` `result.tsx` ``                 | Listagem de resultados | Vicente  | João     |
+| 9  | Tela de Ajuda                    | `` `help.tsx` ``                   | Instruções de uso      | Vicente  | João     |
+| 10 | Tela de Pendência                | `` `pending.tsx` ``                | Mensagem de pendência  | Henrique | Vicente  |
 
-**Objetivo**:  
+**Objetivo**:  
 Como usuário quero poder visualizar os profissionais disponíveis na plataforma e buscar por especialidade, nome ou localização, além de contar com orientações de uso.
 
 ### Iteração 3: Agendamento e Visual
@@ -166,19 +105,19 @@ Nesta terceira iteração, o foco está na implementação do agendamento de con
 
 **Requisitos Funcionais**
 
-| Nº | Requisito                                    | Tela                   | Funcionalidade                          | Autor     | Revisor   |
-|----|----------------------------------------------|------------------------|-----------------------------------------|-----------|-----------|
-| 11 | Agendamento de Usuário                       | calendar.tsx           | Escolha de data e tipo de agendamento  | Henrique  | João      |
-| 12 | Tela de Agendamento de Profissional          | appointmentConfirm.tsx | Confirmação de solicitação              | Vicente   | Henrique  |
-| 13 | Refatorar Cadastro de Profissionais          | register.tsx           | Adicionar senha e tipo de atendimentos | João      | Vicente   |
-| 14 | Tela de Pendentes                            | pending.tsx            | Listagem de solicitações pendentes     | João      | Henrique  |
-| 15 | Tela de Histórico                            | history.tsx            | Consultas já realizadas                 | João      | Vicente   |
-| 16 | Tela de Resultados                           | results.tsx            | Listagem de exames/resultados           | Henrique  | João      |
-| 17 | Fale Conosco na Tela de Ajuda                | help.tsx               | Adicionar campo de contato              | Vicente   | João      |
-| 18 | Visual geral (cores, polimento, logo)        | todas                  | Padronização e identidade visual        | Equipe    | Equipe |
+| Nº | Requisito                                  | Tela                           | Funcionalidade                          | Autor     | Revisor   |
+|----|----------------------------------------------|--------------------------------|-----------------------------------------|-----------|-----------|
+| 11 | Agendamento de Usuário                       | `` `schedule.tsx` ``               | Escolha de data e tipo de agendamento   | Henrique  | João      |
+| 12 | Tela de Agendamento de Profissional          | `` `appointmentConfirm.tsx` ``     | Confirmação de solicitação              | Vicente   | Henrique  |
+| 13 | Refatorar Cadastro de Profissionais          | `` `register-professional.tsx` ``  | Adicionar senha e tipo de atendimentos  | João      | Vicente   |
+| 14 | Tela de Pendentes                            | `` `pending.tsx` ``                 | Listagem de solicitações pendentes      | João      | Henrique  |
+| 15 | Tela de Histórico                            | `` `history.tsx` ``                 | Consultas já realizadas                 | João      | Vicente   |
+| 16 | Tela de Resultados                           | `` `results.tsx` ``                 | Listagem de exames/resultados           | Henrique  | João      |
+| 17 | Fale Conosco na Tela de Ajuda                | `` `help.tsx` ``                    | Adicionar campo de contato              | Vicente   | João      |
+| 18 | Visual geral (cores, polimento, logo)        | todas                          | Padronização e identidade visual        | Equipe    | Equipe    |
 
-**Objetivo**:  
-Como usuário, quero poder agendar atendimentos de forma simples e visualizar o histórico de consultas, enquanto conto com uma interface mais amigável e opções de contato para suporte.  
+**Objetivo**:  
+Como usuário, quero poder agendar atendimentos de forma simples e visualizar o histórico de consultas, enquanto conto com uma interface mais amigável e opções de contato para suporte.  
 Como profissional, quero poder fazer meu login, visualizar, aceitar e cancelar consultas pendentes.
 
 ### Iteração 4: Gestão de Disponibilidade, Resultados de Exames e Otimizações
@@ -187,21 +126,86 @@ Nesta iteração, o foco será em aprimorar a gestão de horários pelos profiss
 
 **Requisitos Funcionais**
 
-| Nº | Requisito                                           | Tela (sugestão)                        | Funcionalidade                                                               | Autor    | Revisor   |
-|----|------------------------------------------------------|----------------------------------------|------------------------------------------------------------------------------|----------|-----------|
-| 19 | Gerenciamento de Disponibilidade (Profissional)      | `professional-availability.tsx`        | Profissional define dias/horários; usuário visualiza e seleciona apenas disponíveis | João     | Henrique  |
-| 20 | Tela de Resultados de Exames (Usuário)               | `user-exam-results.tsx`                | Usuário visualiza seus resultados de exames                                  | Henrique | Vicente   |
-| 21 | Tela de Resultados e Upload de Exames (Profissional) | `professional-exam-management.tsx`     | Profissional visualiza e realiza upload de exames de pacientes              | Vicente  | João      |
-| 22 | Otimização de Pesquisa por Convênios                 | `search.tsx`, `filters.tsx`            | Ajustar e refinar a pesquisa para incluir/melhorar filtros de convênios     | João     | Vicente   |
-| 23 | Melhorias e Correções Gerais                         | Todas                                  | Ajustes de usabilidade, performance e correção de bugs identificados        | Henrique | João      |
+| Nº | Requisito                                          | Tela (sugestão)                        | Funcionalidade                                                                       | Autor    | Revisor   |
+|----|------------------------------------------------------|----------------------------------------|--------------------------------------------------------------------------------------|----------|-----------|
+| 19 | Gerenciamento de Disponibilidade (Profissional)        | `` `professional-availability.tsx` ``      | Profissional define dias/horários; usuário visualiza e seleciona apenas disponíveis    | Henrique     | João  |
+| 20 | Tela de Resultados de Exames (Usuário)               | `` `user-exam-results.tsx` ``            | Usuário visualiza seus resultados de exames                                          | Henrique | Vicente   |
+| 21 | Tela de Resultados e Upload de Exames (Profissional) | `` `professional-exam-management.tsx` `` | Profissional visualiza e realiza upload de exames de pacientes                         | Vicente  | João      |
+| 22 | Otimização de Pesquisa por Convênios                 | `` `search.tsx` ``, `` `filters.tsx` ``        | Ajustar e refinar a pesquisa para incluir/melhorar filtros de convênios                | João     | Vicente   |
+| 23 | Melhorias e Correções Gerais                         | Todas                                  | Ajustes de usabilidade, performance e correção de bugs identificados                   | Henrique | João      |
 
 **Objetivo**:
 Como profissional, quero poder gerenciar meus dias e horários de atendimento de forma flexível.
 Como usuário, quero poder visualizar apenas os horários disponíveis para agendamento e ter acesso aos meus resultados de exames diretamente na plataforma.
 Como profissional, quero poder disponibilizar os resultados dos exames dos meus pacientes de forma digital e segura.
-A plataforma deve oferecer uma busca por convênios mais precisa e eficiente, além de melhorias gerais na experiência de uso.
+A plataforma deve oferecer uma busca por convênios mais precisa e eficiente, além de melhorias gerais na experiência de uso.  
 
-### Links Úteis:
-[Canvas Model](https://www.canva.com/design/DAGieJYwx_A/xZMhdLHK27y2-sjlAGdxYA/edit?utm_content=DAGieJYwx_A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
-[Plano de Negócio](https://drive.google.com/file/d/1AQET8fuBe_vVqDHvAbeuwbzvECn_IEVi/view?usp=sharing)  
-[Prototipação](https://www.figma.com/design/ox6mAwSthgpXY2brCMVVpa/MedFinder?node-id=0-1&t=Epe7rgLvOBSERP3l-1)
+---
+
+## Como Executar o Projeto
+
+Siga as instruções abaixo para configurar e executar o ambiente de desenvolvimento do MedFinder.
+
+### Pré-requisitos
+- [Node.js](https://nodejs.org/) (versão LTS recomendada, ex: 18.x ou superior)
+- [npm](https://www.npmjs.com/) (geralmente vem com o Node.js) ou [Yarn](https://yarnpkg.com/)
+- [Expo Go](https://expo.dev/go) (aplicativo para Android/iOS para visualizar o app durante o desenvolvimento)
+- Conta no [Firebase](https://firebase.google.com/) e um projeto Firebase configurado com Authentication, Firestore e Storage habilitados.
+
+### Configuração
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/henrique-noronha/medfinder](https://github.com/henrique-noronha/medfinder)
+    cd medfinder
+    ```
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    # ou
+    yarn install
+    ```
+3.  **Configure as variáveis de ambiente do Firebase:**
+    - Crie um arquivo `firebaseConfig.ts` na raiz do projeto (ou no local onde você importa suas configurações do Firebase, por exemplo, dentro de uma pasta `./src/` ou `./config/`).
+    - Adicione suas credenciais do Firebase a este arquivo. Exemplo (`firebaseConfig.ts`):
+      ```typescript
+      // Importe os módulos necessários do Firebase SDK
+      import { initializeApp } from "firebase/app";
+      import { getFirestore } from "firebase/firestore";
+      import { getAuth } from "firebase/auth";
+      import { getStorage } from "firebase/storage";
+
+      const firebaseConfig = {
+        apiKey: "SUA_API_KEY",
+        authDomain: "SEU_AUTH_DOMAIN",
+        projectId: "SEU_PROJECT_ID",
+        storageBucket: "SEU_STORAGE_BUCKET",
+        messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+        appId: "SUA_APP_ID"
+      };
+
+      // Inicialize o Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+      const storage = getStorage(app);
+
+      export { db, auth, storage };
+      ```
+    - **Importante:** Certifique-se de que este arquivo (`firebaseConfig.ts`) esteja no seu arquivo `.gitignore` para evitar que suas chaves de API e outras credenciais sensíveis sejam enviadas para o repositório Git público.
+
+### Executando o Projeto
+1.  **Inicie o servidor de desenvolvimento Expo:**
+    ```bash
+    npx expo start
+    ```
+2.  Aguarde o Metro Bundler iniciar e um QR Code aparecer no terminal.
+3.  Abra o aplicativo **Expo Go** no seu smartphone e escaneie o QR Code.
+    - Alternativamente, você pode executar em emuladores Android/iOS (pressionando `a` ou `i` no terminal após o `expo start`).
+
+---
+
+## Links Úteis
+- [User Stories](UserStories.md)  
+- [Canvas Model](https://www.canva.com/design/DAGieJYwx_A/xZMhdLHK27y2-sjlAGdxYA/edit?utm_content=DAGieJYwx_A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
+- [Plano de Negócio](https://drive.google.com/file/d/1AQET8fuBe_vVqDHvAbeuwbzvECn_IEVi/view?usp=sharing)  
+- [Prototipação](https://www.figma.com/design/ox6mAwSthgpXY2brCMVVpa/MedFinder?node-id=0-1&t=Epe7rgLvOBSERP3l-1)
