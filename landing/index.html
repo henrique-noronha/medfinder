@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MedFinder - Sua Conexão com a Saúde</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fcfd;
+      color: #004766;
+      line-height: 1.5;
+    }
+    header {
+      background-color: #e8f6f5;
+      text-align: center;
+      padding: 50px 20px 70px;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-container {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background-color: white;
+      padding: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .logo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #2a7f7f;
+      letter-spacing: 2px;
+    }
+    p.lead {
+      font-size: 1.3rem;
+      color: #3c6e71;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    section {
+      padding: 50px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .section-title {
+      font-size: 2.4rem;
+      color: #004766;
+      border-bottom: 3px solid #2aa5a0;
+      margin-bottom: 30px;
+      padding-bottom: 7px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    .feature-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(42, 165, 160, 0.15);
+      padding: 30px;
+      width: 260px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(42, 165, 160, 0.3);
+    }
+    .feature-icon {
+      width: 60px;
+      margin-bottom: 20px;
+      filter: invert(30%) sepia(20%) saturate(500%) hue-rotate(150deg) brightness(90%);
+    }
+    .feature-text {
+      font-size: 1.1rem;
+      color: #2a7f7f;
+      font-weight: 600;
+    }
+
+    .cta {
+      text-align: center;
+      background-color: #2aa5a0;
+      color: white;
+      padding: 60px 20px;
+      border-radius: 10px;
+      margin: 70px auto;
+      max-width: 700px;
+      box-shadow: 0 8px 30px rgba(42, 165, 160, 0.25);
+    }
+    .cta h2 {
+      font-size: 2.6rem;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+    .cta a {
+      background-color: white;
+      color: #2aa5a0;
+      padding: 16px 40px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease-in-out;
+    }
+    .cta a:hover {
+      background-color: #e0f9f9;
+      color: #1a6e6e;
+      box-shadow: 0 6px 20px rgba(26,110,110,0.4);
+    }
+
+    .team p {
+      font-size: 1.1rem;
+      margin: 8px 0;
+      color: #3c6e71;
+      text-align: center;
+      font-style: italic;
+    }
+
+    footer {
+      background-color: #e8f6f5;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #1c7b78;
+    }
+
+    @media(max-width: 800px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="images/logo.png" alt="Logo MedFinder" />
+    </div>
+    <h1>MedFinder</h1>
+    <p class="lead">Conectando você ao cuidado ideal de forma rápida, prática e segura.</p>
+  </header>
+
+  <section>
+    <h2 class="section-title">Por que escolher o MedFinder?</h2>
+    <div class="features">
+      <div class="feature-card">
+        <img class="feature-icon" src="https://img.icons8.com/ios-filled/50/008080/doctor-male.png" alt="Especialidade médica" />
+        <p class="feature-text">Encontre profissionais por especialidade, localização ou convênio</p>
+      </div>
+      <div class="feature-card">
+        <img class="feature-icon" src="https://img.icons8.com/ios-filled/50/008080/calendar.png" alt="Agendamento" />
+        <p class="feature-text">Agende consultas e exames online sem complicações</p>
+      </div>
+      <div class="feature-card">
+        <img class="feature-icon" src="https://img.icons8.com/ios-filled/50/008080/medical-history.png" alt="Histórico" />
+        <p class="feature-text">Acompanhe seu histórico de atendimentos</p>
+      </div>
+      <div class="feature-card">
+        <img class="feature-icon" src="https://img.icons8.com/ios-filled/50/008080/test-tube.png" alt="Resultados de exames" />
+        <p class="feature-text">Tenha seus resultados de exames sempre à mão</p>
+      </div>
+      <div class="feature-card">
+        <img class="feature-icon" src="https://img.icons8.com/ios-filled/50/008080/lock--v1.png" alt="Segurança" />
+        <p class="feature-text">Plataforma segura, moderna e gratuita para usuários</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Pronto para experimentar o futuro da saúde digital?</h2>
+    <a href="https://github.com/henrique-noronha/medfinder" target="_blank" rel="noopener noreferrer">Acessar o App</a>
+  </section>
+  
+  <section class="team">
+    <h2 class="section-title">Equipe por trás da inovação</h2>
+    <p>Henrique Noronha, Vicente e João Victor Mota</p>
+    <p>Professor Orientador: Edeilson Milhomem da Silva</p>
+    <p>Universidade Federal do Tocantins - Ciência da Computação</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 MedFinder. Todos os direitos reservados.</p>
+  </footer>
+</body>
+</html>
