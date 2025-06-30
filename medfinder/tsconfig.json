@@ -7,16 +7,18 @@
         "./*"
       ]
     },
-    "plugins": [
-      {
-        "name": "expo-router" 
-      }
-    ]
+    // --- ADIÇÃO IMPORTANTE AQUI ---
+    // Informa ao TypeScript para carregar os tipos globais do Jest.
+    // Isso resolverá os erros de 'describe', 'it', etc.
+    "types": ["jest"] 
   },
+  // --- MUDANÇA IMPORTANTE AQUI ---
+  // Garantimos que a pasta de testes seja incluída na verificação de tipos.
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "__tests__/**/*.ts" // Incluindo todos os arquivos .ts na pasta de testes
   ]
 }

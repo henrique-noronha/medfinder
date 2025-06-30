@@ -3,21 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal, Alert, Acti
 import { useLocalSearchParams, useRouter, Href, useNavigation } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { collection, getDocs, DocumentData } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import styles, { gradientColors } from '@/styles/searchStyles';
-
-type Professional = {
-  id: string;
-  fullName: string;
-  specialties: string[];
-  emailContact: string;
-  phone: string;
-  placesOfService: string[];
-  authUid: string;
-  acceptedInsurances?: string[];
-};
-const normalizeText = (text: string = '') => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+import { Professional, filterProfessionals } from '@/utils/searchLogic';
 
 export default function SearchScreen() {
   const router = useRouter();
@@ -26,51 +15,36 @@ export default function SearchScreen() {
   
   const initialResultsArray: Professional[] = results && typeof results === 'string' ? JSON.parse(results) : [];
 
-  // Estados principais
   const [searchQuery, setSearchQuery] = useState(typeof initialQuery === 'string' ? initialQuery : '');
   const [allProfessionals, setAllProfessionals] = useState<Professional[]>([]);
   const [searchResults, setSearchResults] = useState<Professional[]>(initialResultsArray);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Estados para o modal de filtro
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterState, setFilterState] = useState({ name: '', specialty: '', place: '', insurance: '' });
-
-  // Estados "debounceados" para otimização
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [debouncedFilters, setDebouncedFilters] = useState(filterState);
 
-  // Esconde o cabeçalho do layout
   useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
-  // Efeito de Debounce para a busca principal
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedQuery(searchQuery);
-    }, 300); // 300ms de espera
+    const handler = setTimeout(() => { setDebouncedQuery(searchQuery); }, 300);
     return () => clearTimeout(handler);
   }, [searchQuery]);
   
-  // Efeito de Debounce para os filtros do modal
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedFilters(filterState);
-    }, 300);
+    const handler = setTimeout(() => { setDebouncedFilters(filterState); }, 300);
     return () => clearTimeout(handler);
   }, [filterState]);
 
-  // Busca todos os profissionais uma única vez
   useEffect(() => {
     const fetchAllProfessionals = async () => {
       setIsLoading(true);
       try {
         const professionalsRef = collection(db, 'healthcareProfessionals');
         const allSnapshot = await getDocs(professionalsRef);
-        const allDataFetched = allSnapshot.docs.map(docData => {
-          return { id: docData.id, ...docData.data() } as Professional;
-        });
+        const allDataFetched = allSnapshot.docs.map(docData => ({ id: docData.id, ...docData.data() } as Professional));
         setAllProfessionals(allDataFetched);
         if (initialResultsArray.length === 0) {
           setSearchResults(allDataFetched);
@@ -84,29 +58,8 @@ export default function SearchScreen() {
     fetchAllProfessionals();
   }, []);
 
-  // Efeito que aplica o filtro reativamente baseado nos valores "debounceados"
   useEffect(() => {
-    const queryNormalized = normalizeText(debouncedQuery);
-    const nameNormalized = normalizeText(debouncedFilters.name);
-    const specialtyNormalized = normalizeText(debouncedFilters.specialty);
-    const placeNormalized = normalizeText(debouncedFilters.place);
-    const insuranceNormalized = normalizeText(debouncedFilters.insurance);
-
-    const filtered = allProfessionals.filter(prof => {
-      const matchesMainQuery = queryNormalized
-        ? normalizeText(prof.fullName).includes(queryNormalized) ||
-          (prof.specialties || []).some(s => normalizeText(s).includes(queryNormalized)) ||
-          (prof.placesOfService || []).some(p => normalizeText(p).includes(queryNormalized)) ||
-          (prof.acceptedInsurances || []).some(i => normalizeText(i).includes(queryNormalized))
-        : true;
-      const matchesName = nameNormalized ? normalizeText(prof.fullName).includes(nameNormalized) : true;
-      const matchesSpecialty = specialtyNormalized ? (prof.specialties || []).some(s => normalizeText(s).includes(specialtyNormalized)) : true;
-      const matchesPlace = placeNormalized ? (prof.placesOfService || []).some(p => normalizeText(p).includes(placeNormalized)) : true;
-      const matchesInsurance = insuranceNormalized ? (prof.acceptedInsurances || []).some(i => normalizeText(i).includes(insuranceNormalized)) : true;
-      
-      return matchesMainQuery && matchesName && matchesSpecialty && matchesPlace && matchesInsurance;
-    });
-
+    const filtered = filterProfessionals(allProfessionals, debouncedQuery, debouncedFilters);
     setSearchResults(filtered);
   }, [debouncedQuery, debouncedFilters, allProfessionals]);
   
@@ -117,7 +70,7 @@ export default function SearchScreen() {
 
   const navigateToSchedule = (professional: Professional) => {
     if (!professional.authUid) {
-      Alert.alert("Informação Incompleta", "Este profissional não pode ser agendado no momento.");
+      Alert.alert("Informação Incompleta", "Este profissional não pode ser agendado.");
       return;
     }
     const href = `/(user)/scheduleUser?professionalUID=${encodeURIComponent(professional.authUid)}&fullName=${encodeURIComponent(professional.fullName)}&emailContact=${encodeURIComponent(professional.emailContact)}&phone=${encodeURIComponent(professional.phone || '')}&specialties=${encodeURIComponent(JSON.stringify(professional.specialties || []))}&placesOfService=${encodeURIComponent(JSON.stringify(professional.placesOfService || []))}`;

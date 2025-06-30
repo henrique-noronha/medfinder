@@ -5,20 +5,20 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "medfinder", 
+    "scheme": "medfinder",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.seunome.medfinder" 
+      "bundleIdentifier": "com.seunome.medfinder"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.seunome.medfinder", 
-      "versionCode": 1 
+      "package": "com.seunome.medfinder",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
@@ -38,7 +38,13 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true 
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9da0d318-f152-443a-a121-75109ae6ea6e"
+      }
     }
   }
 }

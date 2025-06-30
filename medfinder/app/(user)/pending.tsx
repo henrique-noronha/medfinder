@@ -1,28 +1,20 @@
-import React, { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  ActivityIndicator,
-  TouchableOpacity,
-  Alert,
-
-} from 'react-native';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { collection, query, where, getDocs, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import styles, { gradientColors } from '@/styles/pendingStyles';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import { useAuth } from '@/hooks/AuthContext';
 import { Feather } from '@expo/vector-icons';
 
-// Definição do tipo Appointment
+// Interface de Appointment mais precisa
 type Appointment = {
   id: string;
   professionalName?: string;
   professionalUID: string;
-  date: string;
-  hour: string;
+  date: string; // Esperamos uma string no formato 'YYYY-MM-DD'
+  hour: string; // Esperamos uma string no formato 'HH:mm'
   status: 'pendente';
 };
 
@@ -30,7 +22,6 @@ export default function PendingScreen() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const router = useRouter();
 
   const fetchPendingAppointments = useCallback(async () => {
     if (!user) {
@@ -47,76 +38,56 @@ export default function PendingScreen() {
       );
       const querySnapshot = await getDocs(q);
 
+      // Mapeamento defensivo: validamos cada documento
       const appointmentsData = querySnapshot.docs.map(docSnapshot => {
         const data = docSnapshot.data();
         
-        // Garante que 'date', 'hour' e 'professionalUID' são strings, fornecendo fallback
-        const date = typeof data.date === 'string' ? data.date : '';
-        const hour = typeof data.hour === 'string' ? data.hour : '';
-        const professionalUID = typeof data.professionalUID === 'string' ? data.professionalUID : '';
-        // Verifique outros campos se estiver usando-os e eles puderem ser undefined
-        const professionalName = typeof data.professionalName === 'string' ? data.professionalName : undefined;
-        const status = (typeof data.status === 'string' && ['pendente', 'confirmada', 'cancelada', 'realizada'].includes(data.status)) ? data.status : 'pendente'; // Garante que é um status válido
-
-        // Valida se os campos essenciais estão presentes no documento
-        if (!data.userId || !professionalUID || !status) {
-          console.warn('Documento de agendamento pendente incompleto encontrado, ignorando:', docSnapshot.id, data);
-          return null; // Retorna null para filtrar depois
+        // Valida se os campos essenciais existem e são do tipo correto
+        if (!data.date || typeof data.date !== 'string' || !data.hour || typeof data.hour !== 'string' || !data.professionalUID) {
+          console.warn('Documento de agendamento com dados inválidos ou incompletos, ignorando:', docSnapshot.id);
+          return null; // Retorna null para ser filtrado depois
         }
 
         return {
           id: docSnapshot.id,
-          date: date,
-          hour: hour,
-          professionalUID: professionalUID,
-          professionalName: professionalName, // Atribui o nome do profissional (pode ser undefined aqui)
-          status: status as 'pendente', 
+          date: data.date,
+          hour: data.hour,
+          professionalUID: data.professionalUID,
+          professionalName: data.professionalName, // O nome pode ser undefined inicialmente
+          status: 'pendente',
         } as Appointment;
-      }).filter(Boolean) as Appointment[]; // Remove os 'null' e mantém apenas os válidos
+      }).filter(Boolean) as Appointment[]; // O .filter(Boolean) remove todos os itens nulos do array
 
-      // Para cada agendamento, buscar o nome do profissional PELO UID (se ainda não tiver)
+      // Enriquecimento: busca o nome do profissional apenas se necessário
       const enrichedAppointments = await Promise.all(
         appointmentsData.map(async (app) => {
-          let currentProfessionalName = app.professionalName || 'Profissional Removido'; // Usa o nome existente ou fallback
+          if (app.professionalName) return app; // Se o nome já veio, não busca de novo
           
-          // Se o nome do profissional não veio do appointment ou está vazio, busca no 'users'
-          if (!app.professionalName && typeof app.professionalUID === 'string' && app.professionalUID) {
-            const profDocRef = doc(db, 'users', app.professionalUID);
-            const profDocSnap = await getDoc(profDocRef);
-            if (profDocSnap.exists()) {
-              currentProfessionalName = profDocSnap.data().fullName;
-            }
-          }
+          const profDocRef = doc(db, 'users', app.professionalUID);
+          const profDocSnap = await getDoc(profDocRef);
           return {
             ...app,
-            professionalName: currentProfessionalName,
+            professionalName: profDocSnap.exists() ? profDocSnap.data().fullName : 'Profissional Removido',
           };
         })
       );
-
-      // Filtra agendamentos que ainda possam ter data ou hora vazias/inválidas
-      const validAppointments = enrichedAppointments.filter(app => app.date && app.hour);
-
-      // Ordena por data, do mais próximo para o mais distante (para pendentes)
-      validAppointments.sort((a, b) => {
+      
+      // Ordenação segura
+      enrichedAppointments.sort((a, b) => {
         try {
           const dateA = new Date(`${a.date}T${a.hour}`);
           const dateB = new Date(`${b.date}T${b.hour}`);
-          if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-            console.warn('Data ou hora inválida encontrada durante a ordenação (Pendentes):', a.id, { dateA: a.date, hourA: a.hour }, { dateB: b.date, hourB: b.hour });
-            return 0;
-          }
-          return dateA.getTime() - dateB.getTime(); // Do mais antigo (próximo) para o mais recente (distante)
-        } catch (e) {
-          console.error('Erro ao comparar datas para ordenação (Pendentes):', e, a, b);
+          if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) return 0; // Evita crash com datas inválidas
+          return dateA.getTime() - dateB.getTime();
+        } catch {
           return 0;
         }
       });
 
-      setAppointments(validAppointments);
+      setAppointments(enrichedAppointments);
     } catch (error) {
-      console.error('Erro geral ao buscar consultas pendentes do usuário:', error);
-      Alert.alert('Erro', 'Não foi possível carregar suas consultas pendentes. Tente novamente mais tarde.');
+      console.error('Erro ao buscar consultas pendentes:', error);
+      Alert.alert('Erro', 'Não foi possível carregar suas consultas.');
     } finally {
       setLoading(false);
     }
@@ -149,17 +120,21 @@ export default function PendingScreen() {
         ) : (
           appointments.map((app) => (
             <View key={app.id} style={styles.appointmentCard}>
-              <Text style={styles.patientName}>{app.professionalName || 'Profissional Desconhecido'}</Text> {/* Fallback para nome do profissional */}
+              <Text style={styles.patientName}>{app.professionalName || 'Profissional Desconhecido'}</Text>
+              
+              {/* Renderização defensiva: só mostra a data se ela for válida */}
               <Text style={styles.info}>
-                Data: {app.date && app.hour ?
-                  new Date(app.date + 'T00:00:00Z').toLocaleDateString('pt-BR', { timeZone: 'UTC' })
-                  : 'Data Indisponível'} às {app.hour || 'Hora Indisponível'}
+                Data: {app.date && app.hour 
+                  ? `${new Date(app.date + 'T00:00:00Z').toLocaleDateString('pt-BR', { timeZone: 'UTC' })} às ${app.hour}`
+                  : 'Data não informada'
+                }
               </Text>
+
               <View style={styles.statusContainer}>
-                 <Feather name="clock" size={16} color="#FFD700" />
-                 <Text style={[styles.status, { color: '#FFD700' }]}>
-                   Status: {app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : 'Desconhecido'}
-                 </Text>
+                <Feather name="clock" size={16} color="#FFD700" />
+                <Text style={[styles.status, { color: '#FFD700' }]}>
+                  Status: Aguardando Confirmação
+                </Text>
               </View>
             </View>
           ))
