@@ -150,7 +150,9 @@ Siga as instruções abaixo para configurar e executar o ambiente de desenvolvim
 - [Node.js](https://nodejs.org/) (versão LTS recomendada, ex: 18.x ou superior)
 - [npm](https://www.npmjs.com/) (geralmente vem com o Node.js) ou [Yarn](https://yarnpkg.com/)
 - [Expo Go](https://expo.dev/go) (aplicativo para Android/iOS para visualizar o app durante o desenvolvimento)
-- Conta no [Firebase](https://firebase.google.com/) e um projeto Firebase configurado com Authentication, Firestore e Storage habilitados.
+- Conta no [Firebase](https://firebase.google.com/) e um projeto Firebase configurado com Authentication, Firestore e Storage habilitados.  
+
+### Opção 1:
 
 ### Configuração
 1.  **Clone o repositório:**
@@ -200,12 +202,34 @@ Siga as instruções abaixo para configurar e executar o ambiente de desenvolvim
     ```
 2.  Aguarde o Metro Bundler iniciar e um QR Code aparecer no terminal.
 3.  Abra o aplicativo **Expo Go** no seu smartphone e escaneie o QR Code.
-    - Alternativamente, você pode executar em emuladores Android/iOS (pressionando `a` ou `i` no terminal após o `expo start`).
+    - Alternativamente, você pode executar em emuladores Android/iOS (pressionando `a` ou `i` no terminal após o `expo start`).  
+    
+### 📲 Opção 2: Instalar o APK de Teste (Versão Completa)
 
+Este método instala o aplicativo completo e autossuficiente no seu dispositivo Android, ideal para demonstrações e testes.
+
+1.  **Baixe o Arquivo APK:**
+    * Você pode baixar a versão de teste mais recente diretamente da nossa página de Releases no GitHub.
+    * **[Clique aqui para baixar o APK de Teste (v1.0.0)](LINK_PARA_O_SEU_ARQUIVO_APK_NA_RELEASE)**
+      *(Substitua o link acima pelo link direto do arquivo .apk que você acabou de anexar na sua release)*
+
+2.  **Instale o Arquivo no Dispositivo:**
+    * Transfira o arquivo `.apk` baixado para um celular ou emulador Android.
+    * No dispositivo, encontre o arquivo (geralmente na pasta "Downloads").
+    * Toque nele para iniciar a instalação.
+
+3.  **Permita a Instalação:**
+    * O Android mostrará um aviso de segurança. Toque em **"Configurações"** e ative a permissão para **"Instalar de fontes desconhecidas"**.
+    * Volte e conclua a instalação clicando em **"Instalar"**.
+
+4.  **Use o App:**
+    * O ícone do MedFinder aparecerá na sua lista de apps. Esta versão funciona de forma independente, sem precisar do servidor (`expo start`).
 ---
 
 ## Links Úteis
+- [Landing Page](https://henrique-noronha.github.io/medfinder/)
 - [User Stories](UserStories.md)  
 - [Canvas Model](https://www.canva.com/design/DAGieJYwx_A/xZMhdLHK27y2-sjlAGdxYA/edit?utm_content=DAGieJYwx_A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
 - [Plano de Negócio](https://drive.google.com/file/d/1AQET8fuBe_vVqDHvAbeuwbzvECn_IEVi/view?usp=sharing)  
 - [Prototipação](https://www.figma.com/design/ox6mAwSthgpXY2brCMVVpa/MedFinder?node-id=0-1&t=Epe7rgLvOBSERP3l-1)
+- [Pitch MedFinder](/medfinder/assets/show/Pitch%20MedFinder.pptx)
