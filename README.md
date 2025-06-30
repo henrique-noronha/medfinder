@@ -210,8 +210,7 @@ Este método instala o aplicativo completo e autossuficiente no seu dispositivo 
 
 1.  **Baixe o Arquivo APK:**
     * Você pode baixar a versão de teste mais recente diretamente da nossa página de Releases no GitHub.
-    * **[Clique aqui para baixar o APK de Teste (v1.0.0)](LINK_PARA_O_SEU_ARQUIVO_APK_NA_RELEASE)**
-      *(Substitua o link acima pelo link direto do arquivo .apk que você acabou de anexar na sua release)*
+    * **[Clique aqui para baixar o APK (v1.0.0)](https://github.com/henrique-noronha/medfinder/releases/download/1.3.1/MedFinder.apk)**
 
 2.  **Instale o Arquivo no Dispositivo:**
     * Transfira o arquivo `.apk` baixado para um celular ou emulador Android.
