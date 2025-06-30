@@ -229,6 +229,6 @@ Este método instala o aplicativo completo e autossuficiente no seu dispositivo 
 - [Landing Page](https://henrique-noronha.github.io/medfinder/)
 - [User Stories](UserStories.md)  
 - [Canvas Model](https://www.canva.com/design/DAGieJYwx_A/xZMhdLHK27y2-sjlAGdxYA/edit?utm_content=DAGieJYwx_A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
-- [Plano de Negócio](https://drive.google.com/file/d/1AQET8fuBe_vVqDHvAbeuwbzvECn_IEVi/view?usp=sharing)  
 - [Prototipação](https://www.figma.com/design/ox6mAwSthgpXY2brCMVVpa/MedFinder?node-id=0-1&t=Epe7rgLvOBSERP3l-1)
 - [Pitch MedFinder](/medfinder/assets/show/Pitch%20MedFinder.pptx)
+- [Apresentação Técnica](/medfinder/assets/show/ApresentaçãoTecnicaMedFinder.pptx)
